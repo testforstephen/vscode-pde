@@ -3,13 +3,22 @@
   "displayName": "Eclipse PDE support ",
   "description": "Adds Eclipse PDE Support to Visual Studio Code",
   "version": "0.1.0",
-  "publisher": "gorkem",
+  "publisher": "yaohaizh",
   "preview": true,
   "keywords": [
-    "java"
+    "java",
+    "eclipse",
+    "PDE"
   ],
   "engines": {
     "vscode": "^1.17.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yaohaizh/vscode-pde"
+  },
+  "bugs": {
+    "url": "https://github.com/yaohaizh/vscode-pde/issues"
   },
   "license": "SEE LICENSE IN LICENSE.txt",
   "activationEvents": [
@@ -49,7 +58,7 @@
       "./server/org.eclipse.pde.core_3.11.101.v20171228-1230.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.natives_1.2.200.v20170511-1216.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.1.501.v20170906-1259.jar",
-      "./server/org.eclipse.jdt.ls.importer.pde_1.0.0.20181116-0310.jar"
+      "./server/org.eclipse.jdt.ls.importer.pde_1.0.0.20181204-0637.jar"
     ]
   },
   "scripts": {

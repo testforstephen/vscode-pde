@@ -1,3 +1,5 @@
+## Thanks
+
 ## JDT LS extension for importing Eclipse plugin projects
 
 This projects hosts an extension to [JDT.LS](https://github.com/eclipse/eclipse.jdt.ls) and 
