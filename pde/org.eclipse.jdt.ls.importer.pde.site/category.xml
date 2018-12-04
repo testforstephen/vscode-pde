@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <bundle id="org.eclipse.jdt.ls.importer.pde" version="1.0.0.qualifier"/>
+</site>

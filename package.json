@@ -1,0 +1,77 @@
+{
+  "name": "vscode-pde",
+  "displayName": "Eclipse PDE support ",
+  "description": "Adds Eclipse PDE Support to Visual Studio Code",
+  "version": "0.1.0",
+  "publisher": "gorkem",
+  "preview": true,
+  "keywords": [
+    "java"
+  ],
+  "engines": {
+    "vscode": "^1.17.0"
+  },
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "activationEvents": [
+    "onLanguage:java",
+    "onDebug"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "javaExtensions": [
+      "./server/org.sat4j.pb_2.3.5.v201404071733.jar",
+      "./server/org.sat4j.core_2.3.5.v201308161310.jar",
+      "./server/org.eclipse.ecf.identity_3.8.0.v20161203-2153.jar",
+      "./server/org.eclipse.ecf.provider.filetransfer_3.2.300.v20161203-1840.jar",
+      "./server/org.eclipse.equinox.concurrent_1.1.0.v20130327-1442.jar",
+      "./server/org.eclipse.ecf_3.8.0.v20170104-0657.jar",
+      "./server/org.eclipse.ecf.filetransfer_5.0.0.v20160817-1024.jar",
+      "./server/org.apache.felix.scr_2.0.10.v20170501-2007.jar",
+      "./server/org.eclipse.equinox.p2.transport.ecf_1.1.300.v20161004-0244.jar",
+      "./server/org.tukaani.xz_1.5.0.v20170111-1717.jar",
+      "./server/org.eclipse.equinox.p2.engine_2.5.0.v20170319-2002.jar",
+      "./server/org.eclipse.equinox.p2.repository_2.3.301.v20170906-1259.jar",
+      "./server/org.eclipse.equinox.ds_1.5.0.v20170307-1429.jar",
+      "./server/org.eclipse.equinox.p2.metadata.repository_1.2.401.v20170906-1259.jar",
+      "./server/org.eclipse.equinox.p2.metadata_2.3.200.v20170511-1106.jar",
+      "./server/org.eclipse.equinox.p2.garbagecollector_1.0.300.v20160504-1450.jar",
+      "./server/org.eclipse.equinox.p2.jarprocessor_1.0.500.v20160504-1450.jar",
+      "./server/org.eclipse.equinox.p2.artifact.repository_1.1.650.v20170928-1405.jar",
+      "./server/org.eclipse.equinox.p2.director_2.3.300.v20160504-1450.jar",
+      "./server/org.eclipse.equinox.p2.director.app_1.0.500.v20160419-0834.jar",
+      "./server/org.eclipse.equinox.p2.publisher.eclipse_1.2.201.v20170906-1259.jar",
+      "./server/org.eclipse.equinox.p2.publisher_1.4.200.v20170511-1216.jar",
+      "./server/org.eclipse.pde.build_3.9.300.v20170515-0912.jar",
+      "./server/org.eclipse.update.configurator_3.3.400.v20160506-0750.jar",
+      "./server/org.eclipse.team.core_3.8.100.v20170516-0820.jar",
+      "./server/org.eclipse.equinox.p2.repository.tools_2.1.400.v20170511-1216.jar",
+      "./server/org.eclipse.equinox.p2.core_2.4.101.v20170906-1259.jar",
+      "./server/org.eclipse.pde.core_3.11.101.v20171228-1230.jar",
+      "./server/org.eclipse.equinox.p2.touchpoint.natives_1.2.200.v20170511-1216.jar",
+      "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.1.501.v20170906-1259.jar",
+      "./server/org.eclipse.jdt.ls.importer.pde_1.0.0.20181116-0310.jar"
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test",
+    "build-server": "./node_modules/.bin/gulp build_server"
+  },
+  "extensionDependencies": [
+    "redhat.java"
+  ],
+  "devDependencies": {
+    "@types/mocha": "^2.2.48",
+    "@types/node": "^6.14.2",
+    "gulp": "^4.0.0",
+    "gulp-copy": "^4.0.1",
+    "gulp-tslint": "^8.1.3",
+    "mocha": "^5.2.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.6",
+    "vscode": "^1.1.21"
+  },
+  "dependencies": {}
+}
