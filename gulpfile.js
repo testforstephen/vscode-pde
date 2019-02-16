@@ -48,15 +48,16 @@ gulp.task('tslint', () => {
 });
 
 gulp.task('patch_version', (cb) => {
-    const fileName = findPDEFullfileName();
-    console.log(fileName);
     const packageJsonData = require('./package.json');
     const javaExtensions = packageJsonData.contributes.javaExtensions;
     if (Array.isArray(javaExtensions)) {
         packageJsonData.contributes.javaExtensions  = javaExtensions.map((extensionString) => {
-            const ind = extensionString.indexOf('org.eclipse.jdt.ls.importer.pde');
+            
+            const ind = extensionString.indexOf('_');
+            const fileName = findNewPDEPlugin(extensionString.substring(extensionString.lastIndexOf('/') + 1, ind));
+            
             if (ind >= 0) {
-                return extensionString.substring(0, ind) + fileName;
+                return extensionString.substring(0, extensionString.lastIndexOf('/') + 1) + fileName;
             }
             return extensionString;
         });
@@ -98,5 +99,17 @@ function findPDEFullfileName() {
     const f = files.find((file) => {
         return file.indexOf('org.eclipse.jdt.ls.importer.pde') >= 0;
     });
+    return f;
+}
+
+
+function findNewPDEPlugin(fileName) {
+    fileName = fileName + "_";
+    const destFolder = path.resolve('./server');
+    const files = fs.readdirSync(destFolder);
+    const f = files.find((file) => {
+        return file.indexOf(fileName) >= 0;
+    });
+    console.log(f);
     return f;
 }
