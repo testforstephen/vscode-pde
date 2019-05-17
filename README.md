@@ -1,5 +1,7 @@
 ## Thanks
 
+This extension is orginally developed by [Gorkem Ercan (@gorkem)](https://github.com/gorkem) and [Martin Aeschlimann (@aeschli)](https://github.com/aeschli)
+
 ## JDT LS extension for importing Eclipse plugin projects
 
 This projects hosts an extension to [JDT.LS](https://github.com/eclipse/eclipse.jdt.ls) and 
@@ -8,8 +10,6 @@ the correct target platforms.
 
 ### Building the vscode extension
 ```bash
-cd vscode-pde
-npm install
-npm run build-server
-vsce package 
+npm install 
+gulp full_build
 ```

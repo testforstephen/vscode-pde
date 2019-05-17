@@ -3,7 +3,7 @@
   "displayName": "Eclipse PDE support ",
   "description": "Adds Eclipse PDE Support to Visual Studio Code",
   "version": "0.1.0",
-  "publisher": "yaohaizh",
+  "publisher": "yaozheng",
   "preview": true,
   "keywords": [
     "java",
