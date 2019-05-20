@@ -1,0 +1,6 @@
+{
+    "projects": [
+        "./pde/org.eclipse.jdt.ls.importer.pde"
+    ],
+    "targetPlatform": "./pde/target.target"
+}

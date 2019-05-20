@@ -22,8 +22,7 @@
   },
   "license": "SEE LICENSE IN LICENSE.txt",
   "activationEvents": [
-    "onLanguage:java",
-    "onDebug"
+    "onLanguage:java"
   ],
   "main": "./out/src/extension",
   "contributes": {
@@ -58,7 +57,7 @@
       "./server/org.eclipse.pde.core_3.12.300.v20190214-2042.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.natives_1.3.200.v20180921-1019.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.2.300.v20190215-2242.jar",
-      "./server/org.eclipse.jdt.ls.importer.pde_1.0.0.20190517-0602.jar"
+      "./server/org.eclipse.jdt.ls.importer.pde_1.0.0.20190517-0655.jar"
     ]
   },
   "scripts": {
