@@ -9,4 +9,16 @@
          	order = "100"
          	class = "org.eclipse.jdt.ls.importer.pde.internal.PDEProjectImporter"/>  	
    </extension>
+   <extension
+         point="org.eclipse.jdt.ls.core.delegateCommandHandler">
+      <delegateCommandHandler
+            class="org.eclipse.jdt.ls.importer.pde.internal.PDEDelegateCommandHandler">
+         <command
+               id="java.pde.resolveLaunchArguments">
+         </command>
+         <command
+               id="java.pde.reloadTargetPlatform">
+         </command>
+      </delegateCommandHandler>
+   </extension>
 </plugin>
