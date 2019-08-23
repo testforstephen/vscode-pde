@@ -63,7 +63,7 @@
       "./server/org.eclipse.pde.launching_3.7.600.v20190513-1223.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.natives_1.3.200.v20180921-1019.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.2.300.v20190215-2242.jar",
-      "./server/org.eclipse.jdt.ls.importer.pde_1.1.0.20190821-1504.jar",
+      "./server/org.eclipse.jdt.ls.importer.pde_1.1.0.20190823-0212.jar",
       "./server/org.eclipse.e4.core.contexts_1.8.100.v20190518-1217.jar",
       "./server/org.eclipse.e4.core.services_2.1.400.v20181215-2145.jar",
       "./server/org.eclipse.e4.core.di_1.7.200.v20190506-1457.jar",
@@ -110,7 +110,7 @@
           "group": "pdedebug"
         },
         {
-          "command": "java.pde.debug",
+          "command": "java.pde.reload",
           "when": "resourceExtname == .target",
           "group": "pdedebug"
         }
