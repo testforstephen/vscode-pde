@@ -63,7 +63,7 @@
       "./server/org.eclipse.pde.launching_3.7.600.v20190513-1223.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.natives_1.3.200.v20180921-1019.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.2.300.v20190215-2242.jar",
-      "./server/org.eclipse.jdt.ls.importer.pde_1.1.0.20190823-0212.jar",
+      "./server/org.eclipse.jdt.ls.importer.pde_1.1.0.20190829-0659.jar",
       "./server/org.eclipse.e4.core.contexts_1.8.100.v20190518-1217.jar",
       "./server/org.eclipse.e4.core.services_2.1.400.v20181215-2145.jar",
       "./server/org.eclipse.e4.core.di_1.7.200.v20190506-1457.jar",
@@ -78,7 +78,9 @@
       "./server/org.apache.httpcomponents.httpclient.win_4.5.6.v20190213-1947.jar",
       "./server/com.sun.jna.platform_4.5.1.v20190425-1842.jar",
       "./server/com.sun.jna_4.5.1.v20190425-1842.jar",
-      "./server/org.sonatype.tycho.m2e_0.8.1.201704211436.jar"
+      "./server/org.sonatype.tycho.m2e_0.8.1.201704211436.jar",
+      "./server/org.eclipse.jdt.junit4.runtime_1.1.1000.v20190510-0840.jar",
+      "./server/org.eclipse.pde.junit.runtime_3.5.400.v20190513-1223.jar"
     ],
     "commands": [
       {
@@ -88,6 +90,14 @@
       {
         "command": "java.pde.reload",
         "title": "Reload Target Platform"
+      },
+      {
+        "command": "java.pde.runUnitTest",
+        "title": "Run JUnit Plug-in Test"
+      },
+      {
+        "command": "java.pde.debugUnitTest",
+        "title": "Debug JUnit Plug-in Test"
       }
     ],
     "menus": {
@@ -101,6 +111,26 @@
           "command": "java.pde.reload",
           "when": "resourceExtname == .target",
           "group": "pdedebug"
+        },
+        {
+          "command": "java.pde.runUnitTest",
+          "when": "resourceExtname == .java",
+          "group": "pdedebug@0"
+        },
+        {
+          "command": "java.pde.debugUnitTest",
+          "when": "resourceExtname == .java",
+          "group": "pdedebug@1"
+        },
+        {
+          "command": "java.pde.runUnitTest",
+          "when": "javaLSReady && explorerResourceIsFolder",
+          "group": "pdedebug@0"
+        },
+        {
+          "command": "java.pde.debugUnitTest",
+          "when": "javaLSReady && explorerResourceIsFolder",
+          "group": "pdedebug@1"
         }
       ],
       "editor/context": [
@@ -113,6 +143,28 @@
           "command": "java.pde.reload",
           "when": "resourceExtname == .target",
           "group": "pdedebug"
+        },
+        {
+          "command": "java.pde.runUnitTest",
+          "when": "resourceExtname == .java",
+          "group": "pdedebug@0"
+        },
+        {
+          "command": "java.pde.debugUnitTest",
+          "when": "resourceExtname == .java",
+          "group": "pdedebug@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "java.pde.runUnitTest",
+          "when": "view == testExplorer",
+          "group": "testExplorer@2"
+        },
+        {
+          "command": "java.pde.debugUnitTest",
+          "when": "view == testExplorer",
+          "group": "testExplorer@3"
         }
       ]
     }

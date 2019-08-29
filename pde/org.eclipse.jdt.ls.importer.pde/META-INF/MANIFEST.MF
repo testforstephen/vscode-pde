@@ -25,6 +25,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.equinox.p2.repository,
  org.eclipse.ecf.provider.filetransfer,
  org.eclipse.ecf.provider.filetransfer.httpclient45,
- org.eclipse.ecf.provider.filetransfer.httpclient45.win32
+ org.eclipse.ecf.provider.filetransfer.httpclient45.win32,
+ org.eclipse.pde.junit.runtime,
+ org.eclipse.jdt.junit4.runtime,
+ org.apache.commons.lang3,
+ org.eclipse.jdt.launching,
+ org.eclipse.jdt.junit.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
