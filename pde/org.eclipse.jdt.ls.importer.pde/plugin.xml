@@ -19,6 +19,9 @@
          <command
                id="java.pde.reloadTargetPlatform">
          </command>
+         <command
+               id="java.pde.resolveJUnitArguments">
+         </command>
       </delegateCommandHandler>
    </extension>
 </plugin>

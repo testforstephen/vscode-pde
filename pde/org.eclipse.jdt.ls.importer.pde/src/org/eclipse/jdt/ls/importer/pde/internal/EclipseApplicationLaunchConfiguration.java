@@ -252,7 +252,7 @@ public class EclipseApplicationLaunchConfiguration extends AbstractPDELaunchConf
 		return vmArgs;
 	}
 
-	public Map<String, String> getEnvironmentVariable(ILaunchConfiguration configuration) throws CoreException {
+	public static Map<String, String> getEnvironmentVariable(ILaunchConfiguration configuration) throws CoreException {
 		Map<String, String> configEnv = configuration.getAttribute(LaunchManager.ATTR_ENVIRONMENT_VARIABLES, (Map<String, String>) null);
 		if (configEnv == null) {
 			return null;

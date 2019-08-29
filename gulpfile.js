@@ -53,7 +53,9 @@ const pluginGlobs = [
     repo + 'org.eclipse.ecf.provider.filetransfer.httpclient45.win32_**',
     repo + 'org.apache.httpcomponents.httpclient.win_**',
     repo + 'com.sun.jna.platform_**',
-    repo + 'com.sun.jna_**'
+    repo + 'com.sun.jna_**',
+    repo + 'org.eclipse.pde.junit.runtime_**',
+    repo + 'org.eclipse.jdt.junit4.runtime_**'
 ];
 
 gulp.task('tslint', () => {
