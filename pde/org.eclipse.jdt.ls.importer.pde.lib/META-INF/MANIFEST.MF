@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JDT LS PDE LIB
+Bundle-SymbolicName: org.eclipse.jdt.ls.importer.pde.lib;singleton:=true
+Bundle-Version: 1.2.0.qualifier
+Bundle-Activator: org.eclipse.jdt.ls.importer.pde.lib.internal.PDELibActivator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ecf.provider.filetransfer,
+ org.eclipse.ecf.provider.filetransfer.httpclient45,
+ org.eclipse.ecf.provider.filetransfer.httpclient45.win32
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy

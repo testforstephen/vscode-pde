@@ -142,6 +142,7 @@
       </profiles>
   <modules>
     <module>org.eclipse.jdt.ls.importer.pde</module>
-	  <module>org.eclipse.jdt.ls.importer.pde.site</module>
+    <module>org.eclipse.jdt.ls.importer.pde.lib</module>
+    <module>org.eclipse.jdt.ls.importer.pde.site</module>
   </modules>
 </project>
