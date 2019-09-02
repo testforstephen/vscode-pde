@@ -50,10 +50,6 @@ const pluginGlobs = [
     repo + 'org.apache.httpcomponents.httpclient_**',
     repo + 'org.apache.commons.codec_**',
     repo + 'org.apache.commons.logging_**',
-    repo + 'org.eclipse.ecf.provider.filetransfer.httpclient45.win32_**',
-    repo + 'org.apache.httpcomponents.httpclient.win_**',
-    repo + 'com.sun.jna.platform_**',
-    repo + 'com.sun.jna_**',
     repo + 'org.eclipse.pde.junit.runtime_**',
     repo + 'org.eclipse.jdt.junit4.runtime_**'
 ];
