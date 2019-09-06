@@ -29,6 +29,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.junit4.runtime,
  org.apache.commons.lang3,
  org.eclipse.jdt.launching,
- org.eclipse.jdt.junit.core
+ org.eclipse.jdt.junit.core,
+ javax.annotation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

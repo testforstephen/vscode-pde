@@ -63,7 +63,7 @@
       "./server/org.eclipse.pde.launching_3.7.600.v20190513-1223.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.natives_1.3.200.v20180921-1019.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.2.300.v20190215-2242.jar",
-      "./server/org.eclipse.jdt.ls.importer.pde_1.2.1.20190902-0923.jar",
+      "./server/org.eclipse.jdt.ls.importer.pde_1.2.1.20190906-0909.jar",
       "./server/org.eclipse.e4.core.contexts_1.8.100.v20190518-1217.jar",
       "./server/org.eclipse.e4.core.services_2.1.400.v20181215-2145.jar",
       "./server/org.eclipse.e4.core.di_1.7.200.v20190506-1457.jar",
@@ -76,7 +76,8 @@
       "./server/org.apache.commons.logging_1.2.0.v20180409-1502.jar",
       "./server/org.sonatype.tycho.m2e_0.8.1.201704211436.jar",
       "./server/org.eclipse.jdt.junit4.runtime_1.1.1000.v20190510-0840.jar",
-      "./server/org.eclipse.pde.junit.runtime_3.5.400.v20190513-1223.jar"
+      "./server/org.eclipse.pde.junit.runtime_3.5.400.v20190513-1223.jar",
+      "./server/javax.annotation_1.2.0.v201602091430.jar"
     ],
     "commands": [
       {

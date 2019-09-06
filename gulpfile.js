@@ -51,7 +51,8 @@ const pluginGlobs = [
     repo + 'org.apache.commons.codec_**',
     repo + 'org.apache.commons.logging_**',
     repo + 'org.eclipse.pde.junit.runtime_**',
-    repo + 'org.eclipse.jdt.junit4.runtime_**'
+    repo + 'org.eclipse.jdt.junit4.runtime_**',
+    repo + 'javax.annotation_**'
 ];
 
 gulp.task('tslint', () => {
