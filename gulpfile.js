@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const gulp = require('gulp');
 const gulp_tslint = require('gulp-tslint');
-const gulp_download = require('gulp-download2');
+const download = require('download');
 const cp = require('child_process');
 const server_dir = './pde';
 const repo = server_dir + '/org.eclipse.jdt.ls.importer.pde.site/target/repository/plugins/'
@@ -82,8 +82,8 @@ gulp.task('patch_version', (cb) => {
 });
 
 const m2eConnectorUrl = 'http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.1/N/0.8.1.201704211436/plugins/org.sonatype.tycho.m2e_0.8.1.201704211436.jar';
-gulp.task('download_tycho_m2e', () => {
-    return gulp_download(m2eConnectorUrl).pipe(gulp.dest('./server'));
+gulp.task('download_tycho_m2e', async () => {
+    return download(m2eConnectorUrl, './server');
 });
 
 gulp.task('build_server', gulp.series('download_tycho_m2e', () => {

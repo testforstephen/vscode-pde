@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JDT LS PDE importer
 Bundle-SymbolicName: org.eclipse.jdt.ls.importer.pde;singleton:=true
-Bundle-Version: 1.2.1.qualifier
+Bundle-Version: 1.3.0.qualifier
 Bundle-Activator: org.eclipse.jdt.ls.importer.pde.internal.PDEImporterActivator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.pde.core,

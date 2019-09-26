@@ -2,7 +2,7 @@
   "name": "vscode-pde",
   "displayName": "Eclipse PDE support ",
   "description": "Adds Eclipse PDE Support to Visual Studio Code",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "publisher": "yaozheng",
   "preview": true,
   "keywords": [
@@ -11,7 +11,7 @@
     "PDE"
   ],
   "engines": {
-    "vscode": "^1.17.0"
+    "vscode": "^1.32.0"
   },
   "repository": {
     "type": "git",
@@ -63,7 +63,7 @@
       "./server/org.eclipse.pde.launching_3.7.600.v20190513-1223.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.natives_1.3.200.v20180921-1019.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.2.300.v20190215-2242.jar",
-      "./server/org.eclipse.jdt.ls.importer.pde_1.2.1.20190926-0937.jar",
+      "./server/org.eclipse.jdt.ls.importer.pde_1.3.0.20190926-1222.jar",
       "./server/org.eclipse.e4.core.contexts_1.8.100.v20190518-1217.jar",
       "./server/org.eclipse.e4.core.services_2.1.400.v20181215-2145.jar",
       "./server/org.eclipse.e4.core.di_1.7.200.v20190506-1457.jar",
@@ -169,8 +169,6 @@
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
     "compile": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test",
     "build-server": "./node_modules/.bin/gulp build_server",
     "full-build": "./node_modules/.bin/gulp full_build"
   },
@@ -180,14 +178,14 @@
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/node": "^8.10.51",
+    "@types/vscode": "1.32.0",
+    "download": "^7.1.0",
     "gulp": "^4.0.0",
     "gulp-copy": "^4.0.1",
-    "gulp-download2": "^1.0.2",
     "gulp-tslint": "^8.1.3",
     "mocha": "^5.2.0",
     "tslint": "^5.11.0",
-    "typescript": "^3.2.1",
-    "vscode": "^1.1.36"
+    "typescript": "^3.2.1"
   },
   "dependencies": {}
 }
