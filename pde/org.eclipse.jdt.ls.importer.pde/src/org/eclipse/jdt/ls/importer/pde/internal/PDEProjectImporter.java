@@ -93,7 +93,7 @@ public class PDEProjectImporter extends AbstractProjectImporter {
 			ensureMimimalTimeout("sun.net.client.defaultConnectTimeout", 10000);
 			ensureMimimalTimeout("sun.net.client.defaultReadTimeout", 600000);
 
-			URI projectFolderURI = new File(rootFolder, targetPlatform).toURI();
+			URI projectFolderURI = new File(rootFolder, targetPlatform).getAbsoluteFile().toURI();
 			ITargetHandle targetHandle = service.getTarget(projectFolderURI);
 			ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
 			new LoadTargetDefinitionJob(targetDefinition).runInWorkspace(monitor.split(50));

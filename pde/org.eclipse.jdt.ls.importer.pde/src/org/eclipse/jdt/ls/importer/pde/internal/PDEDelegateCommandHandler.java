@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2019 Microsoft Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Microsoft Corporation - initial API and implementation
+ *******************************************************************************/
+
 package org.eclipse.jdt.ls.importer.pde.internal;
 
 import java.io.File;
@@ -8,6 +19,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,10 +38,13 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ls.core.internal.IDelegateCommandHandler;
 import org.eclipse.jdt.ls.core.internal.JDTUtils;
+import org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin;
+import org.eclipse.jdt.ls.core.internal.ResourceUtils;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetPlatformService;
 import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
+import org.eclipse.pde.internal.core.target.P2TargetUtils;
 import org.eclipse.pde.launching.IPDELauncherConstants;
 
 public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
@@ -106,9 +121,35 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 		ensureMimimalTimeout("sun.net.client.defaultReadTimeout", 600000);
 
 		try {
-			ITargetHandle targetHandle = service.getTarget(new URI(targetUri));
-			ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
-			LoadTargetDefinitionJob.load(targetDefinition);
+			ITargetDefinition targetDefinition = service.getWorkspaceTargetDefinition();
+			boolean isNewDefinition = true;
+			try {
+				if (targetDefinition != null) {
+					IPath currentTargetPath = ResourceUtils.canonicalFilePathFromURI(targetDefinition.getHandle().getMemento());
+					IPath newTargetPath = ResourceUtils.canonicalFilePathFromURI(targetUri);
+					if (currentTargetPath != null && newTargetPath != null) {
+						isNewDefinition = !Objects.equals(currentTargetPath, newTargetPath);
+					}
+				}
+			} catch (Exception e) {
+				// do nothing
+			}
+
+			if (isNewDefinition) {
+				ITargetHandle newTargetHandle = service.getTarget(new URI(targetUri));
+				targetDefinition = newTargetHandle.getTargetDefinition();
+			}
+
+			try {
+				// delete profile
+				P2TargetUtils.forceCheckTarget(targetDefinition);
+				P2TargetUtils.deleteProfile(targetDefinition.getHandle());
+			} catch (CoreException e) {
+				JavaLanguageServerPlugin.log(e);
+			}
+
+			JavaLanguageServerPlugin.logInfo("Reload the definition " + targetUri + " as the active target platform.");
+			ReloadTargetDefinitionJob.load(targetDefinition, !isNewDefinition);
 		} catch (URISyntaxException | CoreException e) {
 			throw new Exception("Failed to reload target platform", e);
 		}
