@@ -102,8 +102,6 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
             try {
                 const launchArguments = <JUnitLaunchArguments> await vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.resolveJUnitArguments", uri.toString(), method);
                 const programArguments = launchArguments.programArguments;
-                // Print junit result to console
-                programArguments.push('-junitconsole');
                 const launchConfiguration = {
                     type: "java",
                     name: path.basename(uri.fsPath),
@@ -119,7 +117,20 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
                     noDebug,
                 };
 
-                await vscode.debug.startDebugging(workspaceFolder, launchConfiguration);
+                if (vscode.extensions.getExtension("vscjava.vscode-java-test") && !(node instanceof vscode.Uri)) {
+                    const portArgIdx: number = launchConfiguration.args.indexOf('-port');
+                    launchConfiguration.args.splice(portArgIdx, 2);
+
+                    if (noDebug) {
+                        await vscode.commands.executeCommand("java.test.explorer.run", node, launchConfiguration);
+                    } else {
+                        await vscode.commands.executeCommand("java.test.explorer.debug", node, launchConfiguration);
+                    }
+                } else {
+                    // Print junit result to console
+                    launchConfiguration.args.push('-junitconsole');
+                    await vscode.debug.startDebugging(workspaceFolder, launchConfiguration);
+                } 
             } catch (error) {
                 vscode.window.showErrorMessage(error && error.message ? error.message : String(error));
             } finally {
