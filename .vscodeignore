@@ -14,7 +14,6 @@ CONTRIBUTING.md
 .vscode-test/**
 **/**.vsix
 **/**.tar.gz
-README.md
 pde/
 gulpfile.js
 javaConfig.json
