@@ -16,7 +16,7 @@ gulp full_build
 
 ## Features
 - ### Auto import Eclipse PDE projects  
-  If you want to enable the PDE extension for your project, it requires you to create a `javaConfig.json` in your workspace root. This config file is used to tell the PDE extension about the locations of the sub projects and target platform file. Notice both the projects and targetPlatform is the relative path to the workspace root. See the sample below:  
+  If you want to enable the PDE extension for your project, it requires you to create a `javaConfig.json` in your workspace root. This config file is used to tell the PDE extension about the locations of the sub projects and target platform file. **Notice**: Both the projects and targetPlatform are the relative path to the workspace root. See the sample below:  
   ```json
   {
     "projects": [
