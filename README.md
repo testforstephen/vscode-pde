@@ -28,17 +28,20 @@ gulp full_build
 
 - ### Reload Target Platform  
   When you right click the _*.target_ file, it will show "**Reload Target Platform**" context menu. This command will trigger a job to reload the target platform. The progress of the reload job will be showed in the status bar. Anytime your local _*.target_ file is changed, you must manually run this command to refresh the target platform.  
-  ![image](https://user-images.githubusercontent.com/14052197/69699539-2295ed80-1123-11ea-963f-16f3cb88e9ca.png)
+
+  ![reloadTargetPlatform](https://user-images.githubusercontent.com/14052197/69771683-a9e96c80-11c8-11ea-9c51-750a94b8dd35.png)
 
 - ### Debug PDE application  
   When you right click an Eclipse _*.launch_ file, it will show "**Debug PDE application**" context menu. This command will calculate the launch parameters of the PDE application first, then persist them into _launch.json_, and finally trigger Java Debugger to launch your PDE application. <b>Notice</b>: to support this feature, you need leverage Eclipse to generate a debug configuration for your PDE application first, and then export the debug config as a _.launch_ file.  
-  ![image](https://user-images.githubusercontent.com/14052197/69700561-b5d02280-1125-11ea-9832-8490c1c8cc40.png)
+
+  ![debugPDEApplication](https://user-images.githubusercontent.com/14052197/69771753-dac9a180-11c8-11ea-97a2-bde1eca10032.png)
 
 - ### Run/Debug JUnit Plug-in Test  
   This extension registered menus to the **Test Explorer**, and allow you to **Run/Debug a JUnit Plug-in Test**.  
-  ![image](https://user-images.githubusercontent.com/14052197/69701695-73f4ab80-1128-11ea-9868-047bde08ccb7.png)
 
-  ![image](https://user-images.githubusercontent.com/14052197/69700746-3131d400-1126-11ea-9525-90b70f823edf.png)
+  ![runTestMenu](https://user-images.githubusercontent.com/14052197/69772120-0e58fb80-11ca-11ea-865c-007b524ccae8.png)
+
+  ![runTestExplorer](https://user-images.githubusercontent.com/14052197/69771935-7eb34d00-11c9-11ea-89f4-c2082f7b5938.png)
 
 
 ## Thanks  
