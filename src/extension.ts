@@ -84,9 +84,10 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
     if (node instanceof vscode.Uri) {
         uri = node;
     } else {
-        uri = vscode.Uri.file(node.fsPath);
-        if (node.isMethod) {
-            method = node.name;
+        uri = vscode.Uri.parse(node.location.uri);
+        if (isTestMethodNode(node)) {
+            const name: string = node.fullName as string;
+            method = name.slice(name.indexOf('#') + 1);
         }
     }
 
@@ -169,6 +170,11 @@ async function persistLaunchConfig(configuration: vscode.DebugConfiguration, wor
         rawConfigs.splice(0, 0, configuration);
         await launchConfigurations.update("configurations", rawConfigs, vscode.ConfigurationTarget.WorkspaceFolder);
     }
+}
+
+function isTestMethodNode(node: any) {
+    // See: https://github.com/microsoft/vscode-java-test/blob/master/src/protocols.ts
+    return node.level === 4;
 }
 
 interface LaunchArguments {
