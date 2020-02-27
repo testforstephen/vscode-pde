@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.jdt.ls.importer.pde.internal;
 
+import static org.eclipse.core.resources.IProjectDescription.DESCRIPTION_FILE_NAME;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -103,10 +105,10 @@ public class PDEProjectImporter extends AbstractProjectImporter {
 		EclipseProjectImporter importer = new EclipseProjectImporter();
 		for (String project : projects) {
 			File projectFolder = new File(rootFolder, project);
-			if (projectFolder.exists()) {
+			if (projectFolder.exists() && new File(projectFolder, DESCRIPTION_FILE_NAME).exists()) {
 				importer.importDir(projectFolder.toPath(), monitor.split(1));
 			} else {
-				PDEImporterActivator.logInfo("Project " + projectFolder.toPath() + " does not exist. Ignoring.");
+				PDEImporterActivator.logError("Project " + projectFolder.toPath() + " does not exist. Ignoring.");
 			}
 		}
 	}

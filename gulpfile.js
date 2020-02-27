@@ -81,8 +81,9 @@ gulp.task('patch_version', (cb) => {
     cb();
 });
 
-const m2eConnectorUrl = 'http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.1/N/0.8.1.201704211436/plugins/org.sonatype.tycho.m2e_0.8.1.201704211436.jar';
+const m2eConnectorUrl = 'https://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.1/N/0.8.1.201704211436/plugins/org.sonatype.tycho.m2e_0.8.1.201704211436.jar';
 gulp.task('download_tycho_m2e', async () => {
+    console.log("downloading " + m2eConnectorUrl);
     return download(m2eConnectorUrl, './server');
 });
 
@@ -108,8 +109,8 @@ function isLinux() {
 }
 
 function mvnw() {
-    return "mvn";
-    // return isWin()?"mvnw.cmd":"./mvnw";
+    // return "mvn";
+    return isWin() ? "mvnw.cmd":"./mvnw";
 }
 
 function findPDEFullfileName() {

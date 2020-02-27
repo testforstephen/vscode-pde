@@ -69,7 +69,7 @@ class TestInfo {
 	public String testKind = "org.eclipse.jdt.junit.loader.junit4";
 	public String testMainType = "";
 	public String testProject = "";
-	public String jreContainer = "JavaSE-1.8";
+	public String jreContainer = "org.eclipse.jdt.launching.JRE_CONTAINER";
 
 	public Map<String, String> toValueMap() {
 		Map<String, String> valueMap = new HashMap<>();

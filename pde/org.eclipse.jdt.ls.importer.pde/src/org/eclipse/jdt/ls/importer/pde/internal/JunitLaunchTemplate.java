@@ -37,7 +37,7 @@ public class JunitLaunchTemplate {
 			"    <booleanAttribute key=\"org.eclipse.jdt.junit.KEEPRUNNING_ATTR\" value=\"false\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.junit.TESTNAME\" value=\"${testName}\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.junit.TEST_KIND\" value=\"${testKind}\"/>\n" +
-			"    <stringAttribute key=\"org.eclipse.jdt.launching.JRE_CONTAINER\" value=\"org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/${jreContainer}\"/>\n" +
+			"    <stringAttribute key=\"org.eclipse.jdt.launching.JRE_CONTAINER\" value=\"${jreContainer}\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.MAIN_TYPE\" value=\"${testMainType}\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.PROGRAM_ARGUMENTS\" value=\"-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${testProject}\"/>\n" +
@@ -81,7 +81,7 @@ public class JunitLaunchTemplate {
 			"    <booleanAttribute key=\"org.eclipse.jdt.junit.KEEPRUNNING_ATTR\" value=\"false\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.junit.TESTNAME\" value=\"${testName}\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.junit.TEST_KIND\" value=\"${testKind}\"/>\n" +
-			"    <stringAttribute key=\"org.eclipse.jdt.launching.JRE_CONTAINER\" value=\"org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/${jreContainer}\"/>\n" +
+			"    <stringAttribute key=\"org.eclipse.jdt.launching.JRE_CONTAINER\" value=\"${jreContainer}\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.MAIN_TYPE\" value=\"${testMainType}\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.PROGRAM_ARGUMENTS\" value=\"-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${testProject}\"/>\n" +
