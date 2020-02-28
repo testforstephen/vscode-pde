@@ -4,17 +4,45 @@ import * as path from "path";
 import * as fs from "fs";
 
 const RECENTLY_USED_PDE_LAUNCH_FILE = "recentlyUsedPdeLaunchFile";
+const RECENTLY_USED_TARGET_FILE = "recentlyUsedTargetFile";
 export function activate(context: vscode.ExtensionContext) {
 
     vscode.commands.registerCommand("java.pde.debug", (uri: vscode.Uri) => {
         launchPDEApplication(context, uri);
     });
 
-    vscode.commands.registerCommand("java.pde.reload", (uri: vscode.Uri) => {
+    vscode.commands.registerCommand("java.pde.reload", async (uri: vscode.Uri) => {
         if (!uri) {
-            vscode.window.showErrorMessage("Please specify a pde target definition file first.");
-            return;
+            // If no target platform file is specified, then use the recently used target file instead.
+            uri = getUriCache(context, RECENTLY_USED_TARGET_FILE);
+            if (!uri || !fs.existsSync(uri.fsPath)) {
+                const targetPaths = await findTargets();
+                if (targetPaths.length === 1) {
+                    uri = vscode.Uri.file(targetPaths[0]);
+                } else if (targetPaths.length > 1) {
+                    const items = targetPaths.map((target) => {
+                        return {
+                            label: path.basename(target),
+                            description: target,
+                        };
+                    });
+                    const picked = await vscode.window.showQuickPick(items, {
+                        placeHolder: "Please select a target definition file",
+                    });
+
+                    if (picked) {
+                        uri = vscode.Uri.file(picked.description);
+                    }
+                }
+            }
+
+            if (!uri) {
+                vscode.window.showErrorMessage("Please specify a pde target definition file first.");
+                return;
+            }
         }
+
+        updateUriCache(context, RECENTLY_USED_TARGET_FILE, uri);
         vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.reloadTargetPlatform", uri.toString());
     });
 
@@ -27,10 +55,33 @@ export function activate(context: vscode.ExtensionContext) {
     });
 }
 
+async function findTargets(): Promise<string[]> {
+    const result: string[] = [];
+    const configs: vscode.Uri[] = await vscode.workspace.findFiles("javaConfig.json");
+    if (configs != null) {
+        for (const config of configs) {
+            try {
+                const configPath = config.fsPath;
+                const rootPath = path.dirname(configPath);
+                if (fs.existsSync(configPath)) {
+                    const javaConfig = JSON.parse(fs.readFileSync(configPath).toString());
+                    if (javaConfig.targetPlatform && fs.existsSync(path.join(rootPath, javaConfig.targetPlatform))) {
+                        result.push(path.join(rootPath, javaConfig.targetPlatform).normalize());
+                    }
+                }
+            } catch (error) {
+                // do nothing
+            }
+        }
+    }
+
+    return result;
+}
+
 async function launchPDEApplication(context: vscode.ExtensionContext, uri: vscode.Uri) {
     if (!uri) {
         // If no pde launch configuration file is specified, then use the recently used launch file instead.
-        uri = context.workspaceState.get<vscode.Uri>(RECENTLY_USED_PDE_LAUNCH_FILE);
+        uri = getUriCache(context, RECENTLY_USED_PDE_LAUNCH_FILE);
         if (!uri || !fs.existsSync(uri.fsPath)) {
             vscode.window.showErrorMessage("Please specify a pde launch configuration file first.");
             return;
@@ -43,7 +94,7 @@ async function launchPDEApplication(context: vscode.ExtensionContext, uri: vscod
         return;
     }
 
-    context.workspaceState.update(RECENTLY_USED_PDE_LAUNCH_FILE, uri);
+    updateUriCache(context, RECENTLY_USED_PDE_LAUNCH_FILE, uri);
     const launchArguments = <LaunchArguments> await vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.resolveLaunchArguments", uri.toString());
     let projectName;
     const javaConfigFile = path.join(workspaceFolder.uri.fsPath, "javaConfig.json");
@@ -71,6 +122,23 @@ async function launchPDEApplication(context: vscode.ExtensionContext, uri: vscod
 
     await persistLaunchConfig(launchConfiguration, workspaceFolder.uri);
     await vscode.debug.startDebugging(workspaceFolder, launchConfiguration);
+}
+
+function getUriCache(context: vscode.ExtensionContext, key: string): vscode.Uri {
+    const cache = context.workspaceState.get<string>(key);
+    try {
+        if (cache) {
+            return vscode.Uri.parse(cache);
+        }
+    } catch (error) {
+        // do nothing
+    }
+
+    return undefined;
+}
+
+function updateUriCache(context: vscode.ExtensionContext, key: string, uri: vscode.Uri) {
+    context.workspaceState.update(key, uri.toString());
 }
 
 async function launchJunitPluginTest(node: any, noDebug: boolean) {
