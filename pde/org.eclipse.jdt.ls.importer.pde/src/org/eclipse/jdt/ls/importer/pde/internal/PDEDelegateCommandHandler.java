@@ -15,6 +15,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -34,8 +35,11 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.ls.core.internal.IDelegateCommandHandler;
 import org.eclipse.jdt.ls.core.internal.JDTUtils;
 import org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin;
@@ -43,7 +47,6 @@ import org.eclipse.jdt.ls.core.internal.ResourceUtils;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetPlatformService;
-import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 import org.eclipse.pde.internal.core.target.P2TargetUtils;
 import org.eclipse.pde.launching.IPDELauncherConstants;
 
@@ -158,11 +161,6 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 	private static Object resolveJunitArguments(String testFileUri, String method, IProgressMonitor monitor) throws Exception {
 		File file = Paths.get(new URI(testFileUri)).toFile();
 		String simpleName = getSimpleName(file);
-		String jreVersion = System.getProperty("java.specification.version");
-		if (StringUtils.isBlank(jreVersion)) {
-			jreVersion = "1.8";
-		}
-		String jreContainer = "JavaSE-" + jreVersion;
 		if (file.isFile()) {
 			ICompilationUnit cu = JDTUtils.resolveCompilationUnit(testFileUri);
 			if (cu == null || cu.findPrimaryType() == null) {
@@ -177,7 +175,7 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 			testInfo.testMainType = testMainType;
 			testInfo.testName = StringUtils.isBlank(method) ? "" : method;
 			testInfo.testProject = testProject;
-			testInfo.jreContainer = jreContainer;
+			testInfo.jreContainer = getJREContainer(cu.getJavaProject());
 			if (!StringUtils.isBlank(method)) {
 				simpleName += "." + method;
 			}
@@ -210,7 +208,7 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 			TestInfo testInfo = new TestInfo();
 			testInfo.testKind = "org.eclipse.jdt.junit.loader.junit4";
 			testInfo.testContainer = StringEscapeUtils.escapeXml(targetElement.getHandleIdentifier());
-			testInfo.jreContainer = jreContainer;
+			testInfo.jreContainer = getJREContainer(targetElement.getJavaProject());
 			testInfo.testProject = targetElement.getJavaProject().getProject().getName();
 			ILaunchConfiguration configuration = new JunitLaunchConfiguration(simpleName, testInfo);
 			JUnitLaunchConfigurationDelegate delegate = new JUnitLaunchConfigurationDelegate();
@@ -218,6 +216,23 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 		}
 
 		throw new Exception("The resource is not testable.");
+	}
+
+	private static String getJREContainer(IJavaProject project) {
+		List<String> containers = new ArrayList<>(Arrays.asList("org.eclipse.jdt.launching.JRE_CONTAINER"));
+		try {
+			if (project != null) {
+				IVMInstall vmInstall = JavaRuntime.getVMInstall(project);
+				if (vmInstall != null && vmInstall.getVMInstallType() != null) {
+					containers.add(vmInstall.getVMInstallType().getId());
+					containers.add(vmInstall.getName());
+				}
+			}
+		} catch (CoreException e) {
+			// do nothing
+		}
+
+		return String.join("/", containers);
 	}
 
 	private static void ensureMimimalTimeout(String property, int min) {
