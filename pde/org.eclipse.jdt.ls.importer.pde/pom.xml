@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.eclipse.jdt.ls.importer.pde</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.4.1-SNAPSHOT</version>
+		<version>1.4.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.eclipse.jdt.ls.importer.pde</artifactId>
 	<packaging>eclipse-plugin</packaging>

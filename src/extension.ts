@@ -1,4 +1,5 @@
 
+import * as compareVersions from "compare-versions";
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
@@ -6,6 +7,7 @@ import * as fs from "fs";
 const RECENTLY_USED_PDE_LAUNCH_FILE = "recentlyUsedPdeLaunchFile";
 const RECENTLY_USED_TARGET_FILE = "recentlyUsedTargetFile";
 export function activate(context: vscode.ExtensionContext) {
+    validateUpstreamJavaExtension();
 
     vscode.commands.registerCommand("java.pde.debug", (uri: vscode.Uri) => {
         launchPDEApplication(context, uri);
@@ -53,6 +55,14 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("java.pde.debugUnitTest", (node: any) => {
         launchJunitPluginTest(node, false);
     });
+}
+
+function validateUpstreamJavaExtension() {
+    const javaExtension = vscode.extensions.getExtension("redhat.java");
+    if (javaExtension && compareVersions(javaExtension.packageJSON.version, "0.66.0") < 0) {
+        vscode.window.showErrorMessage(`The latest PDE extension requires the [Language Support for Java](command:extension.open?%22redhat.java%22) extension 0.66.0 or later (current: ${javaExtension.packageJSON.version}). `
+            + `Please update the upstream Java extension to the latest version and try again.`);
+    }
 }
 
 async function findTargets(): Promise<string[]> {
