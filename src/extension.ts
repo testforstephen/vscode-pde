@@ -162,10 +162,18 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
     if (node instanceof vscode.Uri) {
         uri = node;
     } else {
-        uri = vscode.Uri.parse(node.location.uri);
-        if (isTestMethodNode(node)) {
-            const name: string = node.fullName as string;
-            method = name.slice(name.indexOf('#') + 1);
+        // Currently even the test explorer can support multi-selection,
+        // The node passed in is just a first selected single node element.
+        // We check array here in case in the future the behavior is changed
+        // upstream.
+        if (Array.isArray(node)) {
+            node = node[0];
+        }
+        uri = node.uri;
+        const id: string = (node.id as string);
+        const methodSeparator: number = id.indexOf('#');
+        if (methodSeparator > 0) {
+            method = id.slice(methodSeparator + 1);
         }
     }
 
@@ -176,7 +184,7 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
     }
 
     vscode.window.withProgress({ location: vscode.ProgressLocation.Window }, (p) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise<void>(async (resolve, reject) => {
             p.report({ message: "Launching JUnit Plug-in Test..."});
             try {
                 const launchArguments = <JUnitLaunchArguments> await vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.resolveJUnitArguments", uri.toString(), method);
@@ -248,11 +256,6 @@ async function persistLaunchConfig(configuration: vscode.DebugConfiguration, wor
         rawConfigs.splice(0, 0, configuration);
         await launchConfigurations.update("configurations", rawConfigs, vscode.ConfigurationTarget.WorkspaceFolder);
     }
-}
-
-function isTestMethodNode(node: any) {
-    // See: https://github.com/microsoft/vscode-java-test/blob/master/src/protocols.ts
-    return node.level === 4;
 }
 
 interface LaunchArguments {

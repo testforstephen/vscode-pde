@@ -11,7 +11,7 @@
     "PDE"
   ],
   "engines": {
-    "vscode": "^1.32.0"
+    "vscode": "^1.59.0"
   },
   "repository": {
     "type": "git",
@@ -61,7 +61,7 @@
       "./server/org.eclipse.pde.launching_3.8.200.v20200512-0948.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.natives_1.3.600.v20200511-1530.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.2.600.v20200114-1339.jar",
-      "./server/org.eclipse.jdt.ls.importer.pde_1.4.2.20200902-0809.jar",
+      "./server/org.eclipse.jdt.ls.importer.pde_1.4.2.20210809-0155.jar",
       "./server/org.eclipse.e4.core.contexts_1.8.400.v20191217-1710.jar",
       "./server/org.eclipse.e4.core.services_2.2.300.v20200422-1846.jar",
       "./server/org.eclipse.e4.core.di_1.7.600.v20200428-0912.jar",
@@ -149,16 +149,24 @@
           "group": "pdedebug@1"
         }
       ],
-      "view/item/context": [
+      "testing/item/context": [
         {
           "command": "java.pde.runUnitTest",
-          "when": "view == testExplorer",
-          "group": "testExplorer@2"
+          "group": "testExplorer@0"
         },
         {
           "command": "java.pde.debugUnitTest",
-          "when": "view == testExplorer",
-          "group": "testExplorer@3"
+          "group": "testExplorer@1"
+        }
+      ],
+      "testing/item/gutter": [
+        {
+          "command": "java.pde.runUnitTest",
+          "group": "pdeUnitTest@0"
+        },
+        {
+          "command": "java.pde.debugUnitTest",
+          "group": "pdeUnitTest@1"
         }
       ]
     }
@@ -175,7 +183,7 @@
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/node": "^8.10.51",
-    "@types/vscode": "1.32.0",
+    "@types/vscode": "1.59.0",
     "download": "^7.1.0",
     "gulp": "^4.0.0",
     "gulp-copy": "^4.0.1",
