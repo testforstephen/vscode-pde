@@ -25,6 +25,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -44,6 +45,8 @@ import org.eclipse.jdt.ls.core.internal.IDelegateCommandHandler;
 import org.eclipse.jdt.ls.core.internal.JDTUtils;
 import org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin;
 import org.eclipse.jdt.ls.core.internal.ResourceUtils;
+import org.eclipse.pde.core.project.IBundleProjectDescription;
+import org.eclipse.pde.core.project.IBundleProjectService;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetPlatformService;
@@ -176,6 +179,7 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 			testInfo.testName = StringUtils.isBlank(method) ? "" : method;
 			testInfo.testProject = testProject;
 			testInfo.jreContainer = getJREContainer(cu.getJavaProject());
+			testInfo.testBundle = getBundleName(type.getJavaProject().getProject());
 			if (!StringUtils.isBlank(method)) {
 				simpleName += "." + method;
 			}
@@ -210,12 +214,28 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 			testInfo.testContainer = StringEscapeUtils.escapeXml(targetElement.getHandleIdentifier());
 			testInfo.jreContainer = getJREContainer(targetElement.getJavaProject());
 			testInfo.testProject = targetElement.getJavaProject().getProject().getName();
+			testInfo.testBundle = getBundleName(targetElement.getJavaProject().getProject());
 			ILaunchConfiguration configuration = new JunitLaunchConfiguration(simpleName, testInfo);
 			JUnitLaunchConfigurationDelegate delegate = new JUnitLaunchConfigurationDelegate();
 			return delegate.getJUnitLaunchArguments(configuration, "run", monitor);
 		}
 
 		throw new Exception("The resource is not testable.");
+	}
+
+	private static String getBundleName(IProject project) throws Exception {
+		IBundleProjectService projectService = PDEImporterActivator.acquireService(IBundleProjectService.class);
+		if (projectService == null) {
+			throw new Exception("Unable to find IBundleProjectService.");
+		}
+
+		IBundleProjectDescription projectDescription = projectService.getDescription(project);
+		String bundleName = projectDescription.getSymbolicName();
+		if (bundleName == null || bundleName.isEmpty()) {
+			throw new Exception("Unable to find the test bundle from project " + project.getName());
+		}
+
+		return bundleName;
 	}
 
 	private static String getJREContainer(IJavaProject project) {

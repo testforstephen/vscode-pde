@@ -70,6 +70,7 @@ class TestInfo {
 	public String testMainType = "";
 	public String testProject = "";
 	public String jreContainer = "org.eclipse.jdt.launching.JRE_CONTAINER";
+	public String testBundle = "";
 
 	public Map<String, String> toValueMap() {
 		Map<String, String> valueMap = new HashMap<>();
@@ -79,6 +80,7 @@ class TestInfo {
 		valueMap.put("testMainType", testMainType);
 		valueMap.put("jreContainer", jreContainer);
 		valueMap.put("testProject", testProject);
+		valueMap.put("testBundle", testBundle);
 		return valueMap;
 	}
 }
