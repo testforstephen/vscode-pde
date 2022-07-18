@@ -15,8 +15,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <tycho.version>1.5.0</tycho.version>
-    <tycho.extras.version>1.5.0</tycho.extras.version>
+    <tycho.version>2.7.3</tycho.version>
+    <tycho.extras.version>2.7.3</tycho.extras.version>
     <tycho.scmUrl>scm:git:https://github.com/CHANGE/ME.git</tycho.scmUrl>
     <tycho.generateSourceReferences>false</tycho.generateSourceReferences>
     <tycho.test.platformArgs/>
@@ -25,24 +25,24 @@
 
   <repositories>
     <repository>
-      <id>202006</id>
+      <id>202206</id>
       <layout>p2</layout>
-      <url>https://download.eclipse.org/releases/2020-06/</url>
+      <url>https://download.eclipse.org/releases/2022-06/</url>
     </repository>
     <repository>
       <id>jdt.ls</id>
       <layout>p2</layout>
       <url>http://download.eclipse.org/jdtls/snapshots/repository/latest/</url>
     </repository>
-    <repository>
+    <!-- <repository>
       <id>jboss</id>
       <layout>p2</layout>
       <url>http://download.jboss.org/jbosstools/updates/m2e-extensions/m2e-apt/1.5.2-2018-12-24_15-46-05-H18/</url>
-    </repository>
+    </repository> -->
     <repository>
       <id>orbit</id>
       <layout>p2</layout>
-      <url>http://download.eclipse.org/tools/orbit/R-builds/R20170516192513/repository/</url>
+      <url>https://download.eclipse.org/tools/orbit/R-builds/R20200529191137/repository</url>
     </repository>
     </repositories>
     <build>
