@@ -62,17 +62,17 @@ public class JunitLaunchTemplate {
 			"    <booleanAttribute key=\"append.args\" value=\"true\"/>\n" +
 			// "    <stringAttribute key=\"application\" value=\"org.eclipse.pde.junit.runtime.coretestapplication\"/>\n" +
 			"    <booleanAttribute key=\"askclear\" value=\"false\"/>\n" +
-			"    <booleanAttribute key=\"automaticAdd\" value=\"false\"/>\n" +
-			"    <booleanAttribute key=\"automaticIncludeRequirements\" value=\"true\"/>\n" +
-			"    <booleanAttribute key=\"automaticValidate\" value=\"true\"/>\n" +
+			"    <booleanAttribute key=\"automaticAdd\" value=\"true\"/>\n" +
+			// "    <booleanAttribute key=\"automaticIncludeRequirements\" value=\"true\"/>\n" +
+			"    <booleanAttribute key=\"automaticValidate\" value=\"false\"/>\n" +
 			"    <stringAttribute key=\"bootstrap\" value=\"\"/>\n" +
 			"    <stringAttribute key=\"checked\" value=\"[NONE]\"/>\n" +
 			"    <booleanAttribute key=\"clearConfig\" value=\"true\"/>\n" +
 			"    <booleanAttribute key=\"clearws\" value=\"true\"/>\n" +
 			"    <booleanAttribute key=\"clearwslog\" value=\"false\"/>\n" +
 			"    <stringAttribute key=\"configLocation\" value=\"${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit\"/>\n" +
-			"    <booleanAttribute key=\"default\" value=\"false\"/>\n" +
-			"    <setAttribute key=\"deselected_workspace_bundles\"/>\n" +
+			"    <booleanAttribute key=\"default\" value=\"true\"/>\n" +
+			// "    <setAttribute key=\"deselected_workspace_bundles\"/>\n" +
 			"    <booleanAttribute key=\"includeOptional\" value=\"true\"/>\n" +
 			"    <stringAttribute key=\"location\" value=\"${workspace_loc}/../junit-workspace\"/>\n" +
 			"    <listAttribute key=\"org.eclipse.debug.core.MAPPED_RESOURCE_PATHS\">\n" +
@@ -94,10 +94,10 @@ public class JunitLaunchTemplate {
 			"    <stringAttribute key=\"pde.version\" value=\"3.3\"/>\n" +
 			"    <stringAttribute key=\"product\" value=\"org.eclipse.sdk.ide\"/>\n" +
 			"    <booleanAttribute key=\"run_in_ui_thread\" value=\"false\"/>\n" +
-			"    <setAttribute key=\"selected_target_bundles\"/>\n" +
-			"    <setAttribute key=\"selected_workspace_bundles\">\n" +
-			"        <setEntry value=\"${testBundle}@default:default\"/>\n" +
-			"    </setAttribute>\n" +
+			// "    <setAttribute key=\"selected_target_bundles\"/>\n" +
+			// "    <setAttribute key=\"selected_workspace_bundles\">\n" +
+			// "        <setEntry value=\"${testBundle}@default:default\"/>\n" +
+			// "    </setAttribute>\n" +
 			"    <booleanAttribute key=\"show_selected_only\" value=\"false\"/>\n" +
 			"    <booleanAttribute key=\"tracing\" value=\"false\"/>\n" +
 			"    <booleanAttribute key=\"useCustomFeatures\" value=\"false\"/>\n" +

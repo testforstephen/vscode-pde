@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.eclipse.jdt.ls.importer.pde</groupId>
   <artifactId>parent</artifactId>
-  <version>1.4.2-SNAPSHOT</version>
+  <version>1.4.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>pde.support :: parent</name>
   <description>pde.support parent</description>
@@ -43,6 +43,21 @@
       <id>orbit</id>
       <layout>p2</layout>
       <url>https://download.eclipse.org/tools/orbit/R-builds/R20200529191137/repository</url>
+    </repository>
+    <repository>
+      <id>m2e</id>
+      <layout>p2</layout>
+      <url>https://download.eclipse.org/technology/m2e/releases/latest/</url>
+    </repository>
+    <repository>
+      <id>buildship</id>
+      <layout>p2</layout>
+      <url>https://download.eclipse.org/buildship/updates/e423/snapshots/3.x/3.1.7.v20221108-1729-s/</url>
+    </repository>
+    <repository>
+      <id>lsp4j</id>
+      <layout>p2</layout>
+      <url>https://download.eclipse.org/lsp4j/updates/releases/0.12.0/</url>
     </repository>
     </repositories>
     <build>
