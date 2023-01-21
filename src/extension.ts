@@ -182,12 +182,14 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
         vscode.window.showErrorMessage("No workspace folder found.");
         return;
     }
+    // the setting could be folder based, so use the uri to fetch the correct value.
+    const useUIThread = await vscode.workspace.getConfiguration("java.pde.test.launch", uri).get("useUIThread");
 
     vscode.window.withProgress({ location: vscode.ProgressLocation.Window }, (p) => {
         return new Promise<void>(async (resolve, reject) => {
             p.report({ message: "Launching JUnit Plug-in Test..."});
             try {
-                const launchArguments = <JUnitLaunchArguments> await vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.resolveJUnitArguments", uri.toString(), method);
+                const launchArguments = <JUnitLaunchArguments>await vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.resolveJUnitArguments", uri.toString(), useUIThread, method);
                 const programArguments = launchArguments.programArguments;
                 const launchConfiguration = {
                     type: "java",

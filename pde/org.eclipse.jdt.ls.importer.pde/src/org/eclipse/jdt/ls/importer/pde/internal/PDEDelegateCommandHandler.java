@@ -71,10 +71,14 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 			case RESOLVE_JUNIT_ARGUMENTS:
 				String testFileUri = (String) arguments.get(0);
 				String method = null;
+				boolean useUIThread = false;
 				if (arguments.size() > 1) {
-					method = (String) arguments.get(1);
+					useUIThread = Boolean.valueOf(arguments.get(1).toString());
 				}
-				return resolveJunitArguments(testFileUri, method, monitor);
+				if (arguments.size() > 2) {
+					method = (String) arguments.get(2);
+				}
+				return resolveJunitArguments(testFileUri, method, useUIThread, monitor);
 			default:
 				break;
 		}
@@ -161,7 +165,7 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 		}
 	}
 
-	private static Object resolveJunitArguments(String testFileUri, String method, IProgressMonitor monitor) throws Exception {
+	private static Object resolveJunitArguments(String testFileUri, String method, boolean useUIThread, IProgressMonitor monitor) throws Exception {
 		File file = Paths.get(new URI(testFileUri)).toFile();
 		String simpleName = getSimpleName(file);
 		if (file.isFile()) {
@@ -180,6 +184,7 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 			testInfo.testProject = testProject;
 			testInfo.jreContainer = getJREContainer(cu.getJavaProject());
 			testInfo.testBundle = getBundleName(type.getJavaProject().getProject());
+			testInfo.useUIThread = useUIThread;
 			if (!StringUtils.isBlank(method)) {
 				simpleName += "." + method;
 			}
