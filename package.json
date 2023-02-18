@@ -62,7 +62,7 @@
       "./server/org.eclipse.pde.launching_3.10.0.v20220515-1944.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.natives_1.4.400.v20220506-1821.jar",
       "./server/org.eclipse.equinox.p2.touchpoint.eclipse_2.3.200.v20220503-2330.jar",
-      "./server/org.eclipse.jdt.ls.importer.pde_1.4.3.20230218-1842.jar",
+      "./server/org.eclipse.jdt.ls.importer.pde_1.4.3.20230218-1926.jar",
       "./server/org.eclipse.e4.core.contexts_1.10.0.v20220430-0424.jar",
       "./server/org.eclipse.e4.core.services_2.3.200.v20220513-1235.jar",
       "./server/org.eclipse.e4.core.di_1.8.200.v20220512-1957.jar",

@@ -83,6 +83,9 @@ class TestInfo {
 		valueMap.put("testProject", testProject);
 		valueMap.put("testBundle", testBundle);
 		valueMap.put("useUIThread", String.valueOf(useUIThread));
+		if ("Mac OS X".equals(System.getProperty("os.name"))) {
+			valueMap.put("vmArgs", "-XstartOnFirstThread");
+		}
 		return valueMap;
 	}
 }

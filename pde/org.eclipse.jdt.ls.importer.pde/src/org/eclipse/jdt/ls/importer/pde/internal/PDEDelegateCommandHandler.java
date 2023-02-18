@@ -220,6 +220,7 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 			testInfo.jreContainer = getJREContainer(targetElement.getJavaProject());
 			testInfo.testProject = targetElement.getJavaProject().getProject().getName();
 			testInfo.testBundle = getBundleName(targetElement.getJavaProject().getProject());
+			testInfo.useUIThread = useUIThread;
 			ILaunchConfiguration configuration = new JunitLaunchConfiguration(simpleName, testInfo);
 			JUnitLaunchConfigurationDelegate delegate = new JUnitLaunchConfigurationDelegate();
 			return delegate.getJUnitLaunchArguments(configuration, "run", monitor);
