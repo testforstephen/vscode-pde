@@ -23,6 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.internal.core.LaunchConfiguration;
 import org.eclipse.debug.internal.core.LaunchConfigurationInfo;
@@ -83,8 +84,10 @@ class TestInfo {
 		valueMap.put("testProject", testProject);
 		valueMap.put("testBundle", testBundle);
 		valueMap.put("useUIThread", String.valueOf(useUIThread));
-		if ("Mac OS X".equals(System.getProperty("os.name"))) {
+		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
 			valueMap.put("vmArgs", "-XstartOnFirstThread");
+		} else {
+			valueMap.put("vmArgs", "");
 		}
 		return valueMap;
 	}
