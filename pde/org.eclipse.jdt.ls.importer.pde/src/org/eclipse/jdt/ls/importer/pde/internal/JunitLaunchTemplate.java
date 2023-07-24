@@ -42,10 +42,10 @@ public class JunitLaunchTemplate {
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.PROGRAM_ARGUMENTS\" value=\"-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${testProject}\"/>\n" +
 			"    <stringAttribute key=\"org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER\" value=\"org.eclipse.pde.ui.workbenchClasspathProvider\"/>\n" +
-			"    <stringAttribute key=\"org.eclipse.jdt.launching.VM_ARGUMENTS\" value=\"-ea\"/>\n" +
+			"    <stringAttribute key=\"org.eclipse.jdt.launching.VM_ARGUMENTS\" value=\"-ea  ${vmArgs}\"/>\n" +
 			"    <stringAttribute key=\"pde.version\" value=\"3.3\"/>\n" +
 			"    <stringAttribute key=\"product\" value=\"org.eclipse.sdk.ide\"/>\n" +
-			"    <booleanAttribute key=\"run_in_ui_thread\" value=\"false\"/>\n" +
+			"    <booleanAttribute key=\"run_in_ui_thread\" value=\"${useUIThread}\"/>\n" +
 			"    <booleanAttribute key=\"show_selected_only\" value=\"false\"/>\n" +
 			"    <booleanAttribute key=\"tracing\" value=\"false\"/>\n" +
 			"    <booleanAttribute key=\"useCustomFeatures\" value=\"false\"/>\n" +

@@ -27,7 +27,7 @@
     <repository>
       <id>202206</id>
       <layout>p2</layout>
-      <url>https://download.eclipse.org/releases/2022-06/</url>
+      <url>https://download.eclipse.org/releases/2023-06/</url>
     </repository>
     <repository>
       <id>jdt.ls</id>

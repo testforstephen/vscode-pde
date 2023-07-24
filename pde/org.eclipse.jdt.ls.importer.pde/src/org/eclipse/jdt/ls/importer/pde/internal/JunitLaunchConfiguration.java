@@ -23,6 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.internal.core.LaunchConfiguration;
 import org.eclipse.debug.internal.core.LaunchConfigurationInfo;
@@ -49,7 +50,7 @@ class JUnitLaunchConfigurationInfo extends LaunchConfigurationInfo {
 	public JUnitLaunchConfigurationInfo(TestInfo testInfo) throws CoreException {
 		try {
 			StrSubstitutor sub = new StrSubstitutor(testInfo.toValueMap());
-			String launchXml = sub.replace(JunitLaunchTemplate.HEADLESS_TEMPLATE);
+			String launchXml = sub.replace(testInfo.useUIThread ? JunitLaunchTemplate.TEMPLATE : JunitLaunchTemplate.HEADLESS_TEMPLATE);
 			DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			parser.setErrorHandler(new DefaultHandler());
 			StringReader reader = new StringReader(launchXml);
@@ -71,6 +72,7 @@ class TestInfo {
 	public String testProject = "";
 	public String jreContainer = "org.eclipse.jdt.launching.JRE_CONTAINER";
 	public String testBundle = "";
+	public boolean useUIThread = false;
 
 	public Map<String, String> toValueMap() {
 		Map<String, String> valueMap = new HashMap<>();
@@ -81,6 +83,12 @@ class TestInfo {
 		valueMap.put("jreContainer", jreContainer);
 		valueMap.put("testProject", testProject);
 		valueMap.put("testBundle", testBundle);
+		valueMap.put("useUIThread", String.valueOf(useUIThread));
+		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
+			valueMap.put("vmArgs", "-XstartOnFirstThread");
+		} else {
+			valueMap.put("vmArgs", "");
+		}
 		return valueMap;
 	}
 }
