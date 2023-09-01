@@ -14,7 +14,6 @@ const pluginGlobs = [
     repo + 'org.eclipse.ecf_**',
     repo + 'org.eclipse.equinox.p2.core_**',
     repo + 'org.eclipse.equinox.p2.touchpoint.natives_**',
-    repo + 'org.eclipse.equinox.p2.director.app_**',
     repo + 'org.sat4j.core_**',
     repo + 'org.eclipse.equinox.p2.transport.ecf_**',
     repo + 'org.eclipse.ecf.provider.filetransfer_**',
@@ -38,8 +37,8 @@ const pluginGlobs = [
     repo + 'org.eclipse.equinox.p2.metadata.repository_**',
     repo + 'org.eclipse.equinox.p2.publisher.eclipse_**',
     repo + 'org.eclipse.equinox.p2.repository_**',
-    repo + 'org.bouncycastle.bcpg_**',
-    repo + 'org.bouncycastle.bcprov_**',
+    repo + 'bcpg_**',
+    repo + 'bcprov_**',
     repo + 'org.eclipse.e4.core.contexts_**',
     repo + 'org.eclipse.e4.core.services_**',
     repo + 'org.eclipse.e4.core.di_**',
@@ -51,7 +50,12 @@ const pluginGlobs = [
     repo + 'org.apache.httpcomponents.core5.httpcore5-h2_**',
     repo + 'org.eclipse.pde.junit.runtime_**',
     repo + 'org.eclipse.jdt.junit4.runtime_**',
-    repo + 'javax.annotation_**'
+    repo + 'javax.annotation_**',
+    repo + 'biz.aQute.bnd.util_**',
+    repo + 'biz.aQute.bndlib_**',
+    repo + 'org.eclipse.m2e.pde.target_**',
+    repo + 'org.osgi.service.repository_**',
+    repo + 'org.apache.commons.commons-io_**'
 ];
 
 gulp.task('tslint', () => {
