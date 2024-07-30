@@ -39,6 +39,7 @@ const pluginGlobs = [
     repo + 'org.eclipse.equinox.p2.repository_**',
     repo + 'bcpg_**',
     repo + 'bcprov_**',
+    repo + 'bcutil_**',
     repo + 'org.eclipse.e4.core.contexts_**',
     repo + 'org.eclipse.e4.core.services_**',
     repo + 'org.eclipse.e4.core.di_**',

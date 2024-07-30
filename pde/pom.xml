@@ -9,14 +9,14 @@
   <description>pde.support parent</description>
 
   <prerequisites>
-    <maven>3.0</maven>
+    <maven>3.9.0</maven>
   </prerequisites>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <tycho.version>2.7.3</tycho.version>
-    <tycho.extras.version>2.7.3</tycho.extras.version>
+    <tycho.version>4.0.8</tycho.version>
+    <tycho.extras.version>4.0.8</tycho.extras.version>
     <tycho.scmUrl>scm:git:https://github.com/CHANGE/ME.git</tycho.scmUrl>
     <tycho.generateSourceReferences>false</tycho.generateSourceReferences>
     <tycho.test.platformArgs/>
@@ -25,9 +25,9 @@
 
   <repositories>
     <repository>
-      <id>202206</id>
+      <id>202406</id>
       <layout>p2</layout>
-      <url>https://download.eclipse.org/releases/2023-06/</url>
+      <url>https://download.eclipse.org/releases/2024-06/</url>
     </repository>
     <repository>
       <id>jdt.ls</id>
@@ -57,7 +57,7 @@
     <repository>
       <id>lsp4j</id>
       <layout>p2</layout>
-      <url>https://download.eclipse.org/lsp4j/updates/releases/0.21.0/</url>
+      <url>https://download.eclipse.org/lsp4j/updates/releases/0.22.0/</url>
     </repository>
     </repositories>
     <build>
