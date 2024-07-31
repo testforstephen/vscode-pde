@@ -12,12 +12,18 @@
 package org.eclipse.jdt.ls.importer.pde.internal;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -25,10 +31,18 @@ import org.eclipse.debug.core.Launch;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.junit.launcher.JUnitLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.internal.core.PDECore;
+import org.eclipse.pde.internal.core.PDEState;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 public class JUnitLaunchConfigurationDelegate extends org.eclipse.pde.launching.JUnitLaunchConfigurationDelegate {
+	private static boolean isInstalledBundleLoaded = false;
 
 	public JUnitLaunchArguments getJUnitLaunchArguments(ILaunchConfiguration configuration, String mode, IProgressMonitor monitor) throws CoreException {
+		loadInstalledBundlesToPDECache();
 		ILaunch launch = new Launch(configuration, mode, null);
 		showCommandLine(configuration, mode, launch, monitor);
 
@@ -88,6 +102,66 @@ public class JUnitLaunchConfigurationDelegate extends org.eclipse.pde.launching.
 		launchArguments.port = launch.getAttribute(JUnitLaunchConfigurationConstants.ATTR_PORT);
 
 		return launchArguments;
+	}
+
+	/**
+	 * PDECore.getDefault().findPluginInHost() only searches within
+	 * the built-in bundles (specified by config.ini) of the JDT
+	 * language server. This limitation results in a 'bundle not found'
+	 * error for the PDE plugin. To mitigate this issue, explicitly add
+	 * all installed third-party bundles to the host plugin cache.
+	 */ 
+	private void loadInstalledBundlesToPDECache() {
+		if (isInstalledBundleLoaded) {
+			return;
+		}
+
+		BundleContext context = JavaLanguageServerPlugin.getBundleContext();
+		Bundle[] bundles = context.getBundles();
+		URI[] installedBundlePaths = Arrays.stream(bundles).filter(bundle -> (bundle.getState() & (Bundle.UNINSTALLED)) == 0)
+			.map(bundle -> getURIFromBundleLocation(bundle))
+			.filter(uri -> uri != null)
+			.toArray(URI[]::new);
+
+		PDEState state = new PDEState(installedBundlePaths, true, false, new NullProgressMonitor());
+		state.resolveState(false);
+
+		Map<String, IPluginModelBase> installedPlugins = new HashMap<>();
+		for (IPluginModelBase plugin : state.getTargetModels()) {
+			installedPlugins.put(plugin.getPluginBase().getId(), plugin);
+		}
+
+		PDECore.getDefault().findPluginInHost("org.eclipse.pde.junit.runtime");
+		try {
+			Field upstreamHostPluginsField = PDECore.class.getDeclaredField("fHostPlugins");
+			upstreamHostPluginsField.setAccessible(true);
+			Map<String, IPluginModelBase> upstreamHostPlugins = (Map<String, IPluginModelBase>) upstreamHostPluginsField.get(PDECore.getDefault());
+			upstreamHostPlugins.putAll(installedPlugins);
+			upstreamHostPluginsField.set(PDECore.getDefault(), upstreamHostPlugins);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			// ignore
+		}
+
+		isInstalledBundleLoaded = true;
+	}
+
+	private URI getURIFromBundleLocation(Bundle bundle) {
+		String location = bundle.getLocation();
+		try {
+			if (location.startsWith("initial@reference:")) {
+				location = location.substring("initial@reference:".length());
+				return URIUtil.fromString(location);
+			} else if (location.startsWith("reference:")) {
+				location = location.substring("reference:".length());
+				return URIUtil.fromString(location);
+			} else if (location.startsWith("file:")) {
+				return URIUtil.fromString(location);
+			}
+		} catch (URISyntaxException e) {
+			// ignore
+		}
+
+		return null;
 	}
 
 	public static class JUnitLaunchArguments {

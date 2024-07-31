@@ -11,6 +11,9 @@
           "stopOnEntry": false,
           "sourceMaps": true,
           "outFiles": [ "${workspaceRoot}/out/src/**/*.js" ],
+          "env": {
+              "DEBUG_VSCODE_JAVA": "true"
+          },
           "preLaunchTask": "npm"
       },
       {
