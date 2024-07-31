@@ -2,7 +2,7 @@
   "name": "vscode-pde",
   "displayName": "Eclipse PDE support ",
   "description": "Adds Eclipse PDE Support to Visual Studio Code",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "publisher": "yaozheng",
   "preview": true,
   "keywords": [

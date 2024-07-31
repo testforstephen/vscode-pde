@@ -185,6 +185,8 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
     // the setting could be folder based, so use the uri to fetch the correct value.
     const useUIThread = await vscode.workspace.getConfiguration("java.pde.test.launch", uri).get("useUIThread");
 
+    const debugSettings: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("java.debug.settings");
+    const customVmArgs: string[] = Array.isArray(debugSettings.vmArgs) ? debugSettings.vmArgs : parseVmArgs(debugSettings.vmArgs);
     vscode.window.withProgress({ location: vscode.ProgressLocation.Window }, (p) => {
         return new Promise<void>(async (resolve, reject) => {
             p.report({ message: "Launching JUnit Plug-in Test..."});
@@ -201,7 +203,7 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
                     classPaths: launchArguments.classpath,
                     modulePaths: launchArguments.modulepath,
                     args: programArguments,
-                    vmArgs: launchArguments.vmArguments,
+                    vmArgs: launchArguments.vmArguments.concat(customVmArgs),
                     env: launchArguments.environment,
                     noDebug,
                 };
@@ -228,6 +230,32 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
         });
     });
 
+}
+
+function parseVmArgs(vmArgs: string): string[] {
+    const argsList: string[] = [];
+    let currentArg: string = '';
+    let inQuotes: boolean = false;
+
+    for (let i = 0; i < vmArgs.length; i++) {
+        const c = vmArgs.charAt(i);
+        if (c === '"' || c === "'") {
+            inQuotes = !inQuotes;
+        } else if (c === ' ' && !inQuotes) {
+            if (currentArg.length > 0) {
+                argsList.push(currentArg);
+                currentArg = '';
+            }
+        } else {
+            currentArg += c;
+        }
+    }
+
+    if (currentArg.length > 0) {
+        argsList.push(currentArg);
+    }
+
+    return argsList;
 }
 
 function verifyWorkingDir(cwd: string): string {
