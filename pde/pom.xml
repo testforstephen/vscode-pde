@@ -57,7 +57,7 @@
     <repository>
       <id>lsp4j</id>
       <layout>p2</layout>
-      <url>https://download.eclipse.org/lsp4j/updates/releases/0.22.0/</url>
+      <url>https://download.eclipse.org/lsp4j/updates/releases/0.23.1/</url>
     </repository>
     </repositories>
     <build>
