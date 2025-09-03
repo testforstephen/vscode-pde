@@ -39,6 +39,7 @@ import org.eclipse.core.variables.IStringVariableManager;
 import org.eclipse.core.variables.VariablesPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.osgi.service.environment.Constants;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
@@ -114,7 +115,7 @@ public class EclipseApplicationLaunchConfiguration extends AbstractPDELaunchConf
 
 		// add the output folder names
 		programArgs.add("-dev"); //$NON-NLS-1$
-		programArgs.add(ClasspathHelper.getDevEntriesProperties(getConfigDir(configuration).toString() + "/dev.properties", fAllBundles)); //$NON-NLS-1$
+		programArgs.add(ClasspathHelper.getDevEntriesProperties(getConfigDir(configuration).toString() + "/dev.properties", fAllBundles).toString()); //$NON-NLS-1$
 		//		// necessary for PDE to know how to load plugins when target platform = host platform
 		//		// see PluginPathFinder.getPluginPaths() and PluginPathFinder.isDevLaunchMode()
 		//		IPluginModelBase base = fAllBundles.get(PDECore.PLUGIN_ID);
@@ -188,7 +189,7 @@ public class EclipseApplicationLaunchConfiguration extends AbstractPDELaunchConf
 		SubMonitor subMon = SubMonitor.convert(monitor, 50);
 
 		// Clear workspace and prompt, if necessary
-		LauncherUtils.clearWorkspace(configuration, fWorkspaceLocation, subMon.split(25));
+		LauncherUtils.clearWorkspace(configuration, fWorkspaceLocation, ILaunchManager.RUN_MODE, subMon.split(25));
 
 		subMon.setWorkRemaining(25);
 		if (subMon.isCanceled()) {
