@@ -48,11 +48,11 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.reloadTargetPlatform", uri.toString());
     });
 
-    vscode.commands.registerCommand("java.pde.runUnitTest", (node: any) => {
+    vscode.commands.registerCommand("java.pde.runUnitTest", (node) => {
         launchJunitPluginTest(node, true);
     });
 
-    vscode.commands.registerCommand("java.pde.debugUnitTest", (node: any) => {
+    vscode.commands.registerCommand("java.pde.debugUnitTest", (node) => {
         launchJunitPluginTest(node, false);
     });
 }
@@ -79,7 +79,7 @@ async function findTargets(): Promise<string[]> {
                         result.push(path.join(rootPath, javaConfig.targetPlatform).normalize());
                     }
                 }
-            } catch (error) {
+            } catch {
                 // do nothing
             }
         }
@@ -112,12 +112,12 @@ async function launchPDEApplication(context: vscode.ExtensionContext, uri: vscod
         const javaConfig = JSON.parse(fs.readFileSync(javaConfigFile).toString());
         if (javaConfig && javaConfig.projects && javaConfig.projects.length) {
             projectName = javaConfig.projects[0] || "";
-            const segments = projectName.split(/[\\\/]/);
+            const segments = projectName.split(/[\\/]/);
             projectName = segments[segments.length - 1];
         }
     }
 
-    let insider = vscode.version.endsWith("-insider") ? "-insider" : "";
+    const insider = vscode.version.endsWith("-insider") ? "-insider" : "";
     const launchConfiguration = {
         type: "java",
         name: path.basename(uri.fsPath) + insider,
@@ -140,7 +140,7 @@ function getUriCache(context: vscode.ExtensionContext, key: string): vscode.Uri 
         if (cache) {
             return vscode.Uri.parse(cache);
         }
-    } catch (error) {
+    } catch {
         // do nothing
     }
 
@@ -151,7 +151,7 @@ function updateUriCache(context: vscode.ExtensionContext, key: string, uri: vsco
     context.workspaceState.update(key, uri.toString());
 }
 
-async function launchJunitPluginTest(node: any, noDebug: boolean) {
+async function launchJunitPluginTest(node, noDebug: boolean) {
     if (!node) {
         vscode.window.showErrorMessage("No test resources are specified.");
         return;
@@ -187,47 +187,43 @@ async function launchJunitPluginTest(node: any, noDebug: boolean) {
 
     const debugSettings: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("java.debug.settings");
     const customVmArgs: string[] = Array.isArray(debugSettings.vmArgs) ? debugSettings.vmArgs : parseVmArgs(debugSettings.vmArgs);
-    vscode.window.withProgress({ location: vscode.ProgressLocation.Window }, (p) => {
-        return new Promise<void>(async (resolve, reject) => {
-            p.report({ message: "Launching JUnit Plug-in Test..."});
-            try {
-                const launchArguments = <JUnitLaunchArguments>await vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.resolveJUnitArguments", uri.toString(), useUIThread, method);
-                const programArguments = launchArguments.programArguments;
-                const launchConfiguration = {
-                    type: "java",
-                    name: path.basename(uri.fsPath),
-                    request: "launch",
-                    mainClass: launchArguments.mainClass,
-                    projectName: launchArguments.projectName,
-                    cwd: verifyWorkingDir(launchArguments.cwd),
-                    classPaths: launchArguments.classpath,
-                    modulePaths: launchArguments.modulepath,
-                    args: programArguments,
-                    vmArgs: launchArguments.vmArguments.concat(customVmArgs),
-                    env: launchArguments.environment,
-                    noDebug,
-                };
+    vscode.window.withProgress({ location: vscode.ProgressLocation.Window }, async (p) => {
+        p.report({ message: "Launching JUnit Plug-in Test..."});
+        try {
+            const launchArguments = <JUnitLaunchArguments>await vscode.commands.executeCommand("java.execute.workspaceCommand", "java.pde.resolveJUnitArguments", uri.toString(), useUIThread, method);
+            const programArguments = launchArguments.programArguments;
+            const launchConfiguration = {
+                type: "java",
+                name: path.basename(uri.fsPath),
+                request: "launch",
+                mainClass: launchArguments.mainClass,
+                projectName: launchArguments.projectName,
+                cwd: verifyWorkingDir(launchArguments.cwd),
+                classPaths: launchArguments.classpath,
+                modulePaths: launchArguments.modulepath,
+                args: programArguments,
+                vmArgs: launchArguments.vmArguments.concat(customVmArgs),
+                env: launchArguments.environment,
+                noDebug,
+            };
 
-                if (vscode.extensions.getExtension("vscjava.vscode-java-test") && !(node instanceof vscode.Uri)) {
-                    const portArgIdx: number = launchConfiguration.args.indexOf('-port');
-                    launchConfiguration.args.splice(portArgIdx, 2);
+            if (vscode.extensions.getExtension("vscjava.vscode-java-test") && !(node instanceof vscode.Uri)) {
+                const portArgIdx: number = launchConfiguration.args.indexOf('-port');
+                launchConfiguration.args.splice(portArgIdx, 2);
 
-                    if (noDebug) {
-                        await vscode.commands.executeCommand("java.test.explorer.run", node, launchConfiguration);
-                    } else {
-                        await vscode.commands.executeCommand("java.test.explorer.debug", node, launchConfiguration);
-                    }
+                if (noDebug) {
+                    await vscode.commands.executeCommand("java.test.explorer.run", node, launchConfiguration);
                 } else {
-                    // Print junit result to console
-                    launchConfiguration.args.push('-junitconsole');
-                    await vscode.debug.startDebugging(workspaceFolder, launchConfiguration);
-                } 
-            } catch (error) {
-                vscode.window.showErrorMessage(error && error.message ? error.message : String(error));
-            } finally {
-                resolve();
-            }
-        });
+                    await vscode.commands.executeCommand("java.test.explorer.debug", node, launchConfiguration);
+                }
+            } else {
+                // Print junit result to console
+                launchConfiguration.args.push('-junitconsole');
+                await vscode.debug.startDebugging(workspaceFolder, launchConfiguration);
+            } 
+        } catch (error) {
+            vscode.window.showErrorMessage(error && error.message ? error.message : String(error));
+        }
     });
 
 }
@@ -291,7 +287,7 @@ async function persistLaunchConfig(configuration: vscode.DebugConfiguration, wor
 interface LaunchArguments {
     vmArguments: string[];
     programArguments: string[];
-    environment: any;
+    environment;
     workspaceLocation: string;
     classpath: string[];
 }
@@ -304,6 +300,6 @@ interface JUnitLaunchArguments {
     modulepath: string[];
     vmArguments: string[];
     programArguments: string[];
-    environment: any;
+    environment;
     port: string;
 }
