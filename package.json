@@ -192,6 +192,7 @@
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
     "compile": "tsc -watch -p ./",
+    "lint": "npx eslint src",
     "build-server": "./node_modules/.bin/gulp build_server",
     "full-build": "./node_modules/.bin/gulp full_build"
   },
@@ -199,16 +200,17 @@
     "redhat.java"
   ],
   "devDependencies": {
+    "@eslint/js": "^9.35.0",
     "@types/mocha": "^5.2.5",
-    "@types/node": "^8.10.51",
+    "@types/node": "^20.19.13",
     "@types/vscode": "1.59.0",
     "download": "^7.1.0",
+    "eslint": "^9.35.0",
     "gulp": "^4.0.0",
     "gulp-copy": "^4.0.1",
-    "gulp-tslint": "^8.1.3",
     "mocha": "^10.1.0",
-    "tslint": "^5.11.0",
-    "typescript": "^3.2.1"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.42.0"
   },
   "dependencies": {
     "compare-versions": "^3.6.0"
