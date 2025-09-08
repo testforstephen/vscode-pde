@@ -16,7 +16,10 @@ gulp full_build
 
 ## Features
 - ### Auto import Eclipse PDE projects  
-  If you want to enable the PDE extension for your project, it requires you to create a `javaConfig.json` in your workspace root. This config file is used to tell the PDE extension about the locations of the sub projects and target platform file. **Notice**: Both the projects and targetPlatform are the relative path to the workspace root. See the sample below:  
+  If you want to enable the PDE extension for your project, it requires you to create a `javaConfig.json` in your workspace root. This config file is used to tell the PDE extension about the locations of the sub projects and specify the target platform.
+
+  - You can specify the target platform by setting `targetPlatform` to a `.target` file:
+
   ```json
   {
     "projects": [
@@ -25,6 +28,34 @@ gulp full_build
     "targetPlatform": "./pde/target.target"
   }
   ```
+
+  - Or, you can specify the target platform by setting `eclipseInstallation` to an Eclipse installation:
+
+  ```json
+  {
+    "projects": [
+      "./org.eclipse.jdt.core",
+      "./org.eclipse.jdt.core.compiler.batch"
+    ],
+    "eclipseInstallation": "/home/davthomp/eclipse/2025-09"
+  }
+  ```
+
+  - Or, you can specify both, if you need the contents of your Eclipse installation as well as additional bundles:
+
+  ```json
+  {
+    "projects": [
+      "./org.eclipse.jdt.core",
+      "./org.eclipse.jdt.core.compiler.batch",
+      "./org.eclipse.jdt.core.compiler.test"
+    ],
+    "eclipseInstallation": "/home/davthomp/eclipse/2025-09",
+    "targetPlatform": "jdt.core.target"
+  }
+  ```
+
+  **Notice**: The relative paths used in this file are relative to the workspace root.
 
 - ### Reload Target Platform  
   When you right click the _*.target_ file, it will show "**Reload Target Platform**" context menu. This command will trigger a job to reload the target platform. The progress of the reload job will be showed in the status bar. Anytime your local _*.target_ file is changed, you must manually run this command to refresh the target platform.  
