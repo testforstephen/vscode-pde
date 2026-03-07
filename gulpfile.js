@@ -3,7 +3,6 @@
 const path = require('path');
 const fs = require('fs');
 const gulp = require('gulp');
-const gulp_tslint = require('gulp-tslint');
 // const download = require('download');
 const cp = require('child_process');
 const server_dir = './pde';
@@ -55,20 +54,14 @@ const pluginGlobs = [
     repo + 'javax.inject_**',
     repo + 'biz.aQute.bnd.util_**',
     repo + 'biz.aQute.bndlib_**',
-    // repo + 'org.bndtools.versioncontrol.ignores.manager_**',
-    // repo + 'bndtools.api_**',
+    repo + 'org.bndtools.versioncontrol.ignores.manager_**',
+    repo + 'bndtools.api_**',
     repo + 'jakarta.annotation-api_**',
     repo + 'jakarta.inject.jakarta.inject-api_**',
     repo + 'org.eclipse.m2e.pde.target_**',
     repo + 'org.osgi.service.repository_**',
     repo + 'org.apache.commons.commons-io_**'
 ];
-
-gulp.task('tslint', () => {
-    return gulp.src(['**/*.ts', '!**/*.d.ts', '!node_modules/**'])
-        .pipe(gulp_tslint())
-        .pipe(gulp_tslint.report());
-});
 
 gulp.task('patch_version', (cb) => {
     const packageJsonData = require('./package.json');
