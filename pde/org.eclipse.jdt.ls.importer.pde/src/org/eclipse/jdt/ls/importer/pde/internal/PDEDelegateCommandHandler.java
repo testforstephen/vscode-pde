@@ -17,10 +17,13 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,19 +31,23 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.Launch;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.jdt.ls.core.internal.IDelegateCommandHandler;
 import org.eclipse.jdt.ls.core.internal.JDTUtils;
 import org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin;
@@ -57,6 +64,7 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 	public static final String RESOLVE_LAUNCH_ARGUMENTS = "java.pde.resolveLaunchArguments";
 	public static final String RELOAD_TARGET_PLATFORM = "java.pde.reloadTargetPlatform";
 	public static final String RESOLVE_JUNIT_ARGUMENTS = "java.pde.resolveJUnitArguments";
+	public static final String JUNIT_LAUNCH_CONFIG = "org.eclipse.pde.ui.JunitLaunchConfig";
 
 	@Override
 	public Object executeCommand(String commandId, List<Object> arguments, IProgressMonitor monitor) throws Exception {
@@ -92,19 +100,51 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 			String fileName = getSimpleName(file);
 			ILaunchConfiguration configuration = new PDELaunchConfiguration(fileName, file);
 			String configType = configuration.getType().getIdentifier();
-			if (!configType.equals(IPDELauncherConstants.ECLIPSE_APPLICATION_LAUNCH_CONFIGURATION_TYPE)) {
+
+			if (configType.equals(JUNIT_LAUNCH_CONFIG)) {
+				TestInfo testInfo = new TestInfo();
+				testInfo.testKind = "org.eclipse.jdt.junit.loader.junit4";
+
+				List<String> classesUnderTest = configuration.getAttribute("org.eclipse.debug.core.MAPPED_RESOURCE_PATHS", Collections.emptyList());
+				if (classesUnderTest.isEmpty()) {
+					throw new IllegalArgumentException("Expected a test class or suite to test");
+				}
+				testInfo.testMainType = configuration.getAttribute("org.eclipse.jdt.launching.MAIN_TYPE", "");
+				testInfo.testProject = configuration.getAttribute("org.eclipse.jdt.launching.PROJECT_ATTR", "");
+				testInfo.jreContainer = configuration.getAttribute("org.eclipse.jdt.launching.JRE_CONTAINER", "");
+				testInfo.vmArgs = configuration.getAttribute("org.eclipse.jdt.launching.VM_ARGUMENTS", "");
+				testInfo.testName = configuration.getAttribute("org.eclipse.jdt.junit.TESTNAME", "");
+				testInfo.testBundle = testInfo.testProject;
+				testInfo.useUIThread = configuration.getAttribute("run_in_ui_thread", true);
+				JunitLaunchConfiguration launchConfiguration = new JunitLaunchConfiguration(configType, testInfo);
+				JUnitLaunchConfigurationDelegate delegate = new JUnitLaunchConfigurationDelegate();
+				return delegate.getJUnitLaunchArguments(launchConfiguration, "run", new NullProgressMonitor());
+			} else if (configType.equals(IPDELauncherConstants.ECLIPSE_APPLICATION_LAUNCH_CONFIGURATION_TYPE)) {
+				EclipseApplicationLaunchConfiguration pdeLaunchConfiguration = new EclipseApplicationLaunchConfiguration();
+				pdeLaunchConfiguration.preLaunchCheck(configuration, (ILaunch) null, new NullProgressMonitor());
+				LaunchArguments launchArguments = new LaunchArguments();
+				launchArguments.setVmArguments(pdeLaunchConfiguration.getVMArguments(configuration));
+				launchArguments.setProgramArguments(pdeLaunchConfiguration.getProgramArguments(configuration));
+				launchArguments.setEnvironment(pdeLaunchConfiguration.getEnvironmentVariable(configuration));
+				launchArguments.setClasspath(pdeLaunchConfiguration.getClasspath(configuration));
+				launchArguments.setWorkspaceLocation(pdeLaunchConfiguration.getWorkspaceLocation());
+
+				String jreContainer = configuration.getAttribute("org.eclipse.jdt.launching.JRE_CONTAINER", "org.eclipse.jdt.launching.JRE_CONTAINER");
+				if (!jreContainer.isEmpty()) {
+					String[] segments = jreContainer.split("/");
+					if (segments.length > 2) {
+						IExecutionEnvironment ee = JavaRuntime.getExecutionEnvironmentsManager().getEnvironment(segments[2]);
+						if (ee != null && ee.getDefaultVM() != null) {
+							launchArguments.setJavaExec(ee.getDefaultVM().getInstallLocation().toPath().resolve("bin").resolve("java").toAbsolutePath().toString());
+						}
+					}
+				}
+				
+				return launchArguments;
+			} else {
 				throw new UnsupportedOperationException(String.format("PDE plugin doesn't support the launch type '%s'.", configType));
 			}
-
-			EclipseApplicationLaunchConfiguration pdeLaunchConfiguration = new EclipseApplicationLaunchConfiguration();
-			pdeLaunchConfiguration.preLaunchCheck(configuration, (ILaunch) null, new NullProgressMonitor());
-			LaunchArguments launchArguments = new LaunchArguments();
-			launchArguments.setVmArguments(pdeLaunchConfiguration.getVMArguments(configuration));
-			launchArguments.setProgramArguments(pdeLaunchConfiguration.getProgramArguments(configuration));
-			launchArguments.setEnvironment(pdeLaunchConfiguration.getEnvironmentVariable(configuration));
-			launchArguments.setClasspath(pdeLaunchConfiguration.getClasspath(configuration));
-			launchArguments.setWorkspaceLocation(pdeLaunchConfiguration.getWorkspaceLocation());
-			return launchArguments;
+			
 		} catch (URISyntaxException | CoreException e) {
 			throw new Exception("Failed to parse the launch configuration", e);
 		}
@@ -285,6 +325,7 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 		Map<String, String> environment;
 		String workspaceLocation;
 		String[] classpath;
+		String javaExec;
 
 		public LaunchArguments() {
 		}
@@ -307,6 +348,10 @@ public class PDEDelegateCommandHandler implements IDelegateCommandHandler {
 
 		public void setClasspath(String[] classpath) {
 			this.classpath = classpath;
+		}
+
+		public void setJavaExec(String javaExec) {
+			this.javaExec = javaExec;
 		}
     }
 }

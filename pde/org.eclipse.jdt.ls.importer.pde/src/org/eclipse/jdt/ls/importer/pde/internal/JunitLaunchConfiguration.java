@@ -72,6 +72,7 @@ class TestInfo {
 	public String testProject = "";
 	public String jreContainer = "org.eclipse.jdt.launching.JRE_CONTAINER";
 	public String testBundle = "";
+	public String vmArgs = "";
 	public boolean useUIThread = false;
 
 	public Map<String, String> toValueMap() {
@@ -84,10 +85,11 @@ class TestInfo {
 		valueMap.put("testProject", testProject);
 		valueMap.put("testBundle", testBundle);
 		valueMap.put("useUIThread", String.valueOf(useUIThread));
+		
 		if (Platform.OS_MACOSX.equals(Platform.getOS())) {
-			valueMap.put("vmArgs", "-XstartOnFirstThread");
+			valueMap.put("vmArgs", "-XstartOnFirstThread " + vmArgs);
 		} else {
-			valueMap.put("vmArgs", "");
+			valueMap.put("vmArgs", vmArgs);
 		}
 		return valueMap;
 	}

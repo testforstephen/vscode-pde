@@ -127,7 +127,8 @@ async function launchPDEApplication(context: vscode.ExtensionContext, uri: vscod
         classPaths: launchArguments.classpath,
         args: launchArguments.programArguments,
         vmArgs: launchArguments.vmArguments,
-        env: launchArguments.environment
+        env: launchArguments.environment,
+        javaExec: launchArguments.javaExec,
     };
 
     await persistLaunchConfig(launchConfiguration, workspaceFolder.uri);
@@ -290,6 +291,7 @@ interface LaunchArguments {
     environment;
     workspaceLocation: string;
     classpath: string[];
+    javaExec: string;
 }
 
 interface JUnitLaunchArguments {

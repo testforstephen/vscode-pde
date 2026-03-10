@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.URIUtil;
@@ -44,7 +45,9 @@ public class JUnitLaunchConfigurationDelegate extends org.eclipse.pde.launching.
 	public JUnitLaunchArguments getJUnitLaunchArguments(ILaunchConfiguration configuration, String mode, IProgressMonitor monitor) throws CoreException {
 		loadInstalledBundlesToPDECache();
 		ILaunch launch = new Launch(configuration, mode, null);
-		showCommandLine(configuration, mode, launch, monitor);
+		String commandLine = showCommandLine(configuration, mode, launch, monitor);
+		ILog.get().error(commandLine);
+		String javaExec = commandLine.split("\\s+")[0];
 
 		String mainTypeName = verifyMainTypeName(configuration);
 
@@ -100,6 +103,7 @@ public class JUnitLaunchConfigurationDelegate extends org.eclipse.pde.launching.
 		launchArguments.programArguments = programArguments.toArray(new String[programArguments.size()]);
 		launchArguments.environment = EclipseApplicationLaunchConfiguration.getEnvironmentVariable(configuration);
 		launchArguments.port = launch.getAttribute(JUnitLaunchConfigurationConstants.ATTR_PORT);
+		launchArguments.javaExec = javaExec;
 
 		return launchArguments;
 	}
@@ -174,5 +178,6 @@ public class JUnitLaunchConfigurationDelegate extends org.eclipse.pde.launching.
 		String[] programArguments;
 		Map<String, String> environment;
 		String port;
+		String javaExec;
 	}
 }
