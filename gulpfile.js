@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const gulp = require('gulp');
-// const download = require('download');
+const download = require('download');
 const cp = require('child_process');
 const server_dir = './pde';
 const repo = server_dir + '/org.eclipse.jdt.ls.importer.pde.site/target/repository/plugins/'
@@ -89,13 +89,25 @@ gulp.task('patch_version', (cb) => {
 //     return download(m2eConnectorUrl, './server');
 // });
 
+// org.eclipse.e4.core.contexts (bundled below) mandatorily imports org.osgi.service.event.
+// Historically this was supplied at runtime by redhat.java's bundled jdt.ls, but jdt.ls
+// stopped shipping it (see eclipse-jdtls/eclipse.jdt.ls#3826), so vscode-pde must bundle it
+// itself. Pin 3.10.200: it's the last release that exports org.osgi.service.event directly
+// with no further unresolved dependencies. Never bump this to 3.12.x without also bundling
+// every bundle it re-exports to (see PDE_DEPENDENCY_ISSUE.md for details).
+const osgiServicesUrl = 'https://repo1.maven.org/maven2/org/eclipse/platform/org.eclipse.osgi.services/3.10.200/org.eclipse.osgi.services-3.10.200.jar';
+gulp.task('download_osgi_services', async () => {
+    console.log("downloading " + osgiServicesUrl);
+    return download(osgiServicesUrl, './server', { filename: 'org.eclipse.osgi.services_3.10.200.jar' });
+});
+
 gulp.task('build_server', () => {
     cp.execSync(mvnw() + ' clean package', { cwd: server_dir, stdio: [0, 1, 2] });
     return gulp.src(pluginGlobs)
         .pipe(gulp.dest('./server'));
 });
 
-const full_build = gulp.series('build_server', 'patch_version');
+const full_build = gulp.series('build_server', 'download_osgi_services', 'patch_version');
 gulp.task('full_build', full_build);
 
 function isWin() {
