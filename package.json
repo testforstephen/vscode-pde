@@ -83,7 +83,8 @@
       "./server/jakarta.inject.jakarta.inject-api_2.0.1.jar",
       "./server/org.apache.commons.commons-io_2.20.0.jar",
       "./server/javax.annotation_1.3.5.v20200504-1837.jar",
-      "./server/javax.inject_1.0.0.v20091030.jar"
+      "./server/javax.inject_1.0.0.v20091030.jar",
+      "./server/org.eclipse.osgi.services_3.10.200.jar"
     ],
     "commands": [
       {
