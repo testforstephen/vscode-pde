@@ -83,6 +83,12 @@
       "./server/jakarta.inject.jakarta.inject-api_2.0.1.jar",
       "./server/org.apache.commons.commons-io_2.20.0.jar",
       "./server/javax.annotation_1.3.5.v20200504-1837.jar",
+      "./server/org.osgi.service.event_1.4.1.202109301733.jar",
+      "./server/org.eclipse.m2e.versions.model_2.21.0.jar",
+	  "./server/org.eclipse.m2e.versions.api_2.21.0.jar",
+      "./server/org.apache.commons.commons-collections4_4.5.0.jar",
+      "./server/org.eclipse.m2e.versions.common_2.21.0.jar",
+      "./server/stax2-api_4.3.0.jar",
       "./server/javax.inject_1.0.0.v20091030.jar"
     ],
     "commands": [

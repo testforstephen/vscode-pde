@@ -60,6 +60,12 @@ const pluginGlobs = [
     repo + 'jakarta.inject.jakarta.inject-api_**',
     repo + 'org.eclipse.m2e.pde.target_**',
     repo + 'org.osgi.service.repository_**',
+    repo + 'org.eclipse.m2e.versions.model_**',
+    repo + 'org.eclipse.m2e.versions.common_**',
+    repo + 'org.osgi.service.event_**',
+    repo + 'org.apache.commons.commons-collections4_**',
+    repo + 'stax2-api_**',
+    repo + 'org.eclipse.m2e.versions.api_**',
     repo + 'org.apache.commons.commons-io_**'
 ];
 
@@ -67,16 +73,31 @@ gulp.task('patch_version', (cb) => {
     const packageJsonData = require('./package.json');
     const javaExtensions = packageJsonData.contributes.javaExtensions;
     if (Array.isArray(javaExtensions)) {
-        packageJsonData.contributes.javaExtensions  = javaExtensions.map((extensionString) => {
+        let updatedExtensions  = javaExtensions.map((extensionString) => {
             
             const ind = extensionString.indexOf('_');
-            const fileName = findNewPDEPlugin(extensionString.substring(extensionString.lastIndexOf('/') + 1, ind));
             
             if (ind >= 0) {
-                return extensionString.substring(0, extensionString.lastIndexOf('/') + 1) + fileName;
+                const baseName = extensionString.substring(extensionString.lastIndexOf('/') + 1, ind);
+                const fileName = findNewPDEPlugin(baseName);
+                
+                if (fileName) {
+                    // update bundle with version from "/server"
+                    return extensionString.substring(0, extensionString.lastIndexOf('/') + 1) + fileName;
+                }else{
+                    console.log('not found:' + baseName);
+                    // Array.map() always return new array with same length so keep null and filter out later
+                    return null;
+                }
+                
             }
+            
+            // bundle without version keep it
             return extensionString;
         });
+
+        // filter out bundle not found
+        packageJsonData.contributes.javaExtensions = updatedExtensions.filter(ext => ext != null);
 
         fs.writeFileSync('./package.json', JSON.stringify(packageJsonData, null, 2));
     }
@@ -130,8 +151,19 @@ function findNewPDEPlugin(fileName) {
     const destFolder = path.resolve('./server');
     const files = fs.readdirSync(destFolder);
     const f = files.find((file) => {
-        return file.indexOf(fileName) >= 0;
+        if (file.indexOf(fileName) >= 0) {
+            // Language support for Java extension (1.55) already provider inject-api_1.0.5 so don't include 1.x to avoid bellow issue when load extension 
+            // A bundle is already installed with the name "jakarta.inject.jakarta.inject-api" and version "1.0.5"
+            if (file.indexOf("jakarta.inject.jakarta.inject-api_1.") >= 0) {
+                console.log("ignore inject-api 1.x:" + file);
+                return false;
+            }
+            
+            return true;
+        }
+        return false;
     });
+    
     console.log(f);
     return f;
 }
